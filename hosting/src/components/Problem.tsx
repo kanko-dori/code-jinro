@@ -11,7 +11,15 @@ class Problem extends React.Component<Props, State> {
   render() {
     return (
       <div className="container">
-        <iframe frameBorder="0" src={this.props.url} title="Problem"></iframe>
+        <iframe
+          frameBorder="0"
+          src={this.props.url}
+          title="Problem"
+          sandbox="allow-scripts allow-same-origin"
+          referrerPolicy="no-referrer"
+          onClick={e => e.preventDefault()}
+        >
+        </iframe>
       </div>
     );
   }
