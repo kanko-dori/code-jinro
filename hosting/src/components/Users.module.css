@@ -4,7 +4,6 @@
   padding-top: 48px;
 }
 
-.userlist {
-  max-height: calc(100% - 48px);
-  overflow-y: auto;
+.container form {
+  padding: 2em;
 }
