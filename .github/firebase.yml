@@ -11,18 +11,18 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: CD for functions
-        run: cd functions
-      - name: Install Dependencies
+      - name: Install Dependencies for functions
         run: npm install
-      - name: CD for hosting
-        run: cd functions
-      - name: Install Dependencies
+        working-directory: ./functions
+      - name: Install Dependencies for hosting
         run: npm install
+        working-directory: ./hosting
       - name: Build
         run: npm run build
+        working-directory: ./hosting
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
+        working-directory: ./hosting
         with:
           name: build
           path: build
