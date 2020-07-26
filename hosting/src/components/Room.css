@@ -3,12 +3,19 @@
   flex-wrap: wrap;
 }
 
+section {
+  padding: 0;
+  margin: 0;
+}
 .editor {
   height: 100vh;
+  width: 40vw;
 }
 .problem {
   height: 100vh;
+  width: 40vw;
 }
 .users {
   height: 100vh;
+  width: 19vw;
 }
