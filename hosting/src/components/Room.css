@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.editor {
+  height: 100vh;
+}
+.problem {
+  height: 100vh;
+}
+.users {
+  height: 100vh;
+}
