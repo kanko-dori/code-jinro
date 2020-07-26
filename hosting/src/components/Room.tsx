@@ -20,42 +20,16 @@ interface Props {
   };
 }
 interface State {
-  room: Room
+  room?: Room
+  id: string
 }
 
 class RoomComponent extends React.Component<Props, State> {
   constructor(props: Props){
     super(props);
-    
-    const docRef = firestore.collection("room").doc(props.match.params.id)
-    docRef.get().then(doc => {
-      if(doc.exists){
-        this.state = {
-          room: doc.data() as Room
-        }
-      }else{
-        const initalData :Room = {
-          currentRound: {
-            problemURL: "",
-            code:  "",
-          },
-          users: [{
-            userName: "taka",
-            point: 0
-          }],
-          currentState: RoundState.問題提示,
-          history: []
-        }
-        console.log(initalData)
-        docRef.set(initalData)
-          .then(() => console.log("Document successfully written", initalData))
-          .catch(err => console.error("Writing docuemnt failed.: ", err))
-
-        this.state = {
-          room: initalData
-        }
-      }
-    })
+    this.state = {
+      id: props.match.params.id,
+    }
   }
 
   render() {
@@ -78,7 +52,40 @@ class RoomComponent extends React.Component<Props, State> {
   }
 
   onNameInput(name: string) {
-    this.setState({ name });
+    const docRef = firestore.collection("room").doc(this.state.id)
+    docRef.get().then(doc => {
+
+      if(doc.exists){
+        const stateData = doc.data() as Room
+        stateData.users.push({userName: name, point: 0})
+        this.state = {
+          room: doc.data() as Room,
+          id: this.state.id
+        }
+      }else{
+        const initalData :Room = {
+          currentRound: {
+            problemURL: "",
+            code:  "",
+          },
+          users: [{
+            userName: name,
+            point: 0
+          }],
+          currentState: RoundState.問題提示,
+          history: []
+        }
+        console.log(initalData)
+        docRef.set(initalData)
+          .then(() => console.log("Document successfully written", initalData))
+          .catch(err => console.error("Writing docuemnt failed.: ", err))
+
+        this.state = {
+          room: initalData,
+          id: this.state.id
+        }
+      }
+    })
   }
 };
 export default RoomComponent;
