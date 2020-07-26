@@ -5,7 +5,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/theme-tomorrow";
 import { ChangeEvent } from 'react';
 
-import "./Editor.css";
+import classes from "./Editor.module.css";
 
 const languages = [
   "javascript",
@@ -45,7 +45,7 @@ class Editor extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="container">
+      <div className={classes.container}>
         <select onChange={this.onLangChange} defaultValue={languages[0]}>
           {
             languages.map(lang =>

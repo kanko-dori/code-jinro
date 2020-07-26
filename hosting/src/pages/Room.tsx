@@ -2,14 +2,15 @@ import React from "react";
 
 import {
 } from "@material-ui/core";
-import NameInput from "./NameInput";
-import Editor from "./Editor";
-import Problem from "./Problem";
-import Users from "./Users";
+import NameInput from "../components/NameInput";
+import Editor from "../components/Editor";
+import Problem from "../components/Problem";
+import Users from "../components/Users";
 
 import { firestore } from '../utils/firebase';
-import { Room, RoundState } from '../types/types'
-import "./Room.css";
+import { Room, RoundState } from '../types/types';
+
+import classes from "./Room.module.css";
 
 interface Props {
   match: {
@@ -34,17 +35,17 @@ class RoomComponent extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="container">
-        <section className="name_input">
+      <div className={classes.container}>
+        <section className={classes.name_input}>
           <NameInput onNameInput={this.onNameInput.bind(this)}></NameInput>
         </section>
-        <section className="editor">
+        <section className={classes.editor}>
           <Editor autocomplete={true}></Editor>
         </section>
-        <section className="problem">
+        <section className={classes.problem}>
           <Problem url={"https://atcoder.jp/contests/abc047/tasks/abc047_a"}></Problem>
         </section>
-        <section className="users">
+        <section className={classes.users}>
           <Users></Users>
         </section>
       </div>
