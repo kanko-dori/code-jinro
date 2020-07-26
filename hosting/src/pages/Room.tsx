@@ -63,11 +63,29 @@ class RoomComponent extends React.Component<Props, State> {
     const docRef = firestore.collection("room").doc(this.state.id)
     docRef.get().then(doc => {
       if(doc.exists){
-        const stateData = doc.data() as Room
-        stateData.users.push({userName: name, point: 0, userID: this.state.user? this.state.user.uid: ""})
-        docRef.set(stateData)
-        .then(() => console.log("Document successfully written", stateData))
-        .catch(err => console.error("Writing docuemnt failed.: ", err))
+        let stateData = doc.data() as Room
+        const index = stateData.users.findIndex(u => u.userID === this.state.user?.uid)
+        console.log(index)
+
+        if(index === -1){
+          console.log("new user: ", name)
+          stateData.users.push({userName: name, point: 0, userID: this.state.user? this.state.user.uid: ""})
+          docRef.set(stateData)
+            .then(() => console.log("Document successfully written", stateData))
+            .catch(err => console.error("Writing docuemnt failed.: ", err))
+
+        } else {
+          if(stateData.users[index].userName === name){
+            console.log("duplicate uid. skipping update firestore")
+          }else{
+            console.log("update to use new name")
+            stateData.users[index].userName = name
+            docRef.set(stateData)
+            .then(() => console.log("Document successfully written", stateData))
+            .catch(err => console.error("Writing docuemnt failed.: ", err))
+          }
+        }
+
         this.setState({
           room: doc.data() as Room,
         })
@@ -88,8 +106,8 @@ class RoomComponent extends React.Component<Props, State> {
         }
         console.log(initalData)
         docRef.set(initalData)
-        .then(() => console.log("Document successfully written", initalData))
-        .catch(err => console.error("Writing docuemnt failed.: ", err))
+          .then(() => console.log("Document successfully written", initalData))
+          .catch(err => console.error("Writing docuemnt failed.: ", err))
         this.setState({
           room: initalData,
         })
