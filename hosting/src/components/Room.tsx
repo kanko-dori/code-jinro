@@ -7,7 +7,7 @@ import Editor from "./Editor";
 import Problem from "./Problem";
 import Users from "./Users";
 
-import "./Room.css";
+import classes from "./Room.module.css";
 
 interface Props {
   match: {
@@ -22,17 +22,17 @@ interface State {}
 class Room extends React.Component<Props, State> {
   render() {
     return (
-      <div className="container">
-        <section className="name_input">
+      <div className={classes.container}>
+        <section className={classes.name_input}>
           <NameInput onNameInput={this.onNameInput.bind(this)}></NameInput>
         </section>
-        <section className="editor">
+        <section className={classes.editor}>
           <Editor autocomplete={true}></Editor>
         </section>
-        <section className="problem">
+        <section className={classes.problem}>
           <Problem url={"https://atcoder.jp/contests/abc047/tasks/abc047_a"}></Problem>
         </section>
-        <section className="users">
+        <section className={classes.users}>
           <Users></Users>
         </section>
       </div>

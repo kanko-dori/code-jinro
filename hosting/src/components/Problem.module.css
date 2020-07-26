@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.container::before, .container::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 20%;
+}
+
+.container::before {
+  top: 0;
+}
+.container::after {
+  bottom: 0;
+}

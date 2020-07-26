@@ -1,6 +1,8 @@
 .container {
   display: flex;
   flex-wrap: wrap;
+  height: 100%;
+  width: 100%;
 }
 
 section {
@@ -8,14 +10,14 @@ section {
   margin: 0;
 }
 .editor {
-  height: 100vh;
+  height: 100%;
   width: 40vw;
 }
 .problem {
-  height: 100vh;
+  height: 100%;
   width: 40vw;
 }
 .users {
-  height: 100vh;
+  height: 100%;
   width: 19vw;
 }
