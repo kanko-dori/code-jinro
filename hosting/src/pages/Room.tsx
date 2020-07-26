@@ -63,10 +63,16 @@ class RoomComponent extends React.Component<Props, State> {
     docRef.get().then(doc => {
       if(doc.exists){
         const stateData = doc.data() as Room
-        stateData.users.push({userName: name, point: 0, userID: this.state.user? this.state.user.uid: ""})
-        docRef.set(stateData)
-        .then(() => console.log("Document successfully written", stateData))
-        .catch(err => console.error("Writing docuemnt failed.: ", err))
+        
+        if(stateData.users.find(u => u.userID === this.state.user?.uid)){
+          console.log("duplicate uid. skipping update firestore")
+        } else {
+          stateData.users.push({userName: name, point: 0, userID: this.state.user? this.state.user.uid: ""})
+          docRef.set(stateData)
+            .then(() => console.log("Document successfully written", stateData))
+            .catch(err => console.error("Writing docuemnt failed.: ", err))
+        }
+
         this.setState({
           room: doc.data() as Room,
         })
