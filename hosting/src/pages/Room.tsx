@@ -2,13 +2,13 @@ import React from "react";
 
 import {
 } from "@material-ui/core";
-import NameInput from "./NameInput";
-import Editor from "./Editor";
-import Problem from "./Problem";
-import Users from "./Users";
+import NameInput from "../components/NameInput";
+import Editor from "../components/Editor";
+import Problem from "../components/Problem";
+import Users from "../components/Users";
 
 import { firestore } from '../utils/firebase';
-import { Room, RoundState } from '../types/types'
+import { Room, RoundState } from '../types/types';
 
 import classes from "./Room.module.css";
 
