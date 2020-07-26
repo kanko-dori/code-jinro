@@ -14,7 +14,7 @@ export type Round = {
 
 export type User = {
     userName: string
-    // userID: string
+    userID: string
     point: number
 }
 
