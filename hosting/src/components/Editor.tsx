@@ -46,22 +46,24 @@ class Editor extends React.Component<Props, State> {
             )
           }
         </select>
-        <AceEditor
-          theme="tomorrow"
-          name="code_editor"
-          fontSize={20}
-          style={{ width: "100%", height: "100%" }}
-          setOptions={{
-            enableBasicAutocompletion: this.props.autocomplete,
-            enableLiveAutocompletion: this.props.autocomplete,
-            enableSnippets: this.props.autocomplete,
-            showLineNumbers: true,
-            tabSize: 4
-          }}
-          mode={this.state.mode}
-          onChange={this.onCodeChange}
-        >
-        </AceEditor>
+        <div className={classes.wrapper}>
+          <AceEditor
+            theme="tomorrow"
+            name="code_editor"
+            fontSize={20}
+            style={{ width: "100%", height: "100%" }}
+            setOptions={{
+              enableBasicAutocompletion: this.props.autocomplete,
+              enableLiveAutocompletion: this.props.autocomplete,
+              enableSnippets: this.props.autocomplete,
+              showLineNumbers: true,
+              tabSize: 4
+            }}
+            mode={this.state.mode}
+            onChange={this.onCodeChange}
+          >
+          </AceEditor>
+        </div>
       </div>
     );
   }
