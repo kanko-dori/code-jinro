@@ -6,20 +6,8 @@ import "ace-builds/src-noconflict/theme-tomorrow";
 import { ChangeEvent } from 'react';
 
 import classes from "./Editor.module.css";
+import { languages } from "../utils/constants";
 
-const languages = [
-  "javascript",
-  "c_cpp",
-  "java",
-  "elixir",
-  "golang",
-  "typescript",
-  "python",
-  "haxe",
-  "ruby",
-  "rust",
-  "php",
-];
 languages.forEach(lang => {
   require(`ace-builds/src-noconflict/mode-${lang}`);
   require(`ace-builds/src-noconflict/snippets/${lang}`);
