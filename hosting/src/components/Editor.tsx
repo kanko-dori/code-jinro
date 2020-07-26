@@ -5,6 +5,8 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/theme-tomorrow";
 import { ChangeEvent } from 'react';
 
+import "./Editor.css";
+
 const languages = [
   "javascript",
   "c_cpp",
@@ -37,23 +39,22 @@ class Editor extends React.Component<Props, State> {
     this.onCodeChange = this.onCodeChange.bind(this);
     this.onLangChange = this.onLangChange.bind(this);
     this.state = {
-      mode: "javascript"
+      mode: languages[0]
     };
   }
 
   render() {
     return (
-      <div>
+      <div className="container">
         <select onChange={this.onLangChange} defaultValue={languages[0]}>
           {
-            languages.map(
-              (lang, i) => 
-                <option
-                  value={lang}
-                  key={lang}
-                >
-                  {lang}
-                </option>
+            languages.map(lang =>
+              <option
+                value={lang}
+                key={lang}
+              >
+                {lang}
+              </option>
             )
           }
         </select>
@@ -61,6 +62,7 @@ class Editor extends React.Component<Props, State> {
           theme="tomorrow"
           name="code_editor"
           fontSize={20}
+          style={{ width: "100%", height: "100%" }}
           setOptions={{
             enableBasicAutocompletion: this.props.autocomplete,
             enableLiveAutocompletion: this.props.autocomplete,

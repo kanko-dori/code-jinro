@@ -1,5 +1,7 @@
 import React from 'react';
 
+import "./Users.tsx";
+
 interface Props {}
 interface State {
   users: User[];
@@ -15,7 +17,7 @@ class Users extends React.Component<Props, State> {
   }
   render() {
     return (
-      <div>
+      <div className="container">
         <ul>
           {
             this.state.users.map(user =>
