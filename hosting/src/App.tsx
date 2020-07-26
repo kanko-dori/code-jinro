@@ -15,7 +15,7 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/" component={Home}></Route>
-        <Route path="/rooms/:id" component={Room}></Route>
+        <Route path="/room/:id" component={Room}></Route>
         <Redirect to="/"></Redirect>
       </Switch>
     </Router>
