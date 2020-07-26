@@ -61,7 +61,7 @@ class Editor extends React.Component<Props, State> {
             tabSize: 4
           }}
           mode={this.state.mode}
-          onChange={e => this.onCodeChange(e)}
+          onChange={this.onCodeChange}
           value={this.props.code}
         >
         </AceEditor>
