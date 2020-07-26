@@ -7,7 +7,7 @@ import Editor from "../components/Editor";
 import Problem from "../components/Problem";
 import Users from "../components/Users";
 
-import { firestore, auth } from '../utils/firebase';
+import { realtimeDB, auth } from '../utils/firebase';
 import { Room, RoundState } from '../types/types';
 import { languages } from "../utils/constants";
 
@@ -34,10 +34,10 @@ class RoomComponent extends React.Component<Props, State> {
       id: props.match.params.id,
     }
     
-    const docRef = firestore.collection("room").doc(this.state.id)
-    docRef.onSnapshot(doc => {
-      const data = doc.data() as Room
-      console.log("onSnapshot: ", data)
+    const docRef = realtimeDB.ref('room/' + this.state.id)
+    docRef.on('value', doc => {
+      const data = doc.val() as Room
+      console.log("value: ", data)
       this.setState({room: data})
     })
     
@@ -64,13 +64,19 @@ class RoomComponent extends React.Component<Props, State> {
 
   onCodeChange(code: string) {
     console.log(code)
-    const docRef = firestore.collection("room").doc(this.state.id)
-
+    // const docRef = firestore.collection("room").doc(this.state.id)
     if(this.state.room){
       let newRoomState = this.state.room
       newRoomState.currentRound.code = code
       this.setState({room: newRoomState})
-      docRef.set(this.state.room)
+      realtimeDB.ref('room/' + this.state.id + "/currentRound").update({code: code})
+      //   , e =>{
+      //   if(e){
+      //     console.error(e)
+      //   }else{
+      //     console.log(e)
+      //   }
+      // })
     }
   }
 
@@ -80,10 +86,12 @@ class RoomComponent extends React.Component<Props, State> {
       return
     })
 
-    const docRef = firestore.collection("room").doc(this.state.id)
-    docRef.get().then(doc => {
-      if(doc.exists){
-        let stateData = doc.data() as Room
+    const docRef = realtimeDB.ref('room/' + this.state.id)
+    console.log(docRef)
+    docRef.once('value').then(doc => {
+      console.log(doc)
+      if(doc.exists()){
+        let stateData = doc.val() as Room
         const index = stateData.users.findIndex(u => u.userID === this.state.user?.uid)
         console.log(index)
 
@@ -107,7 +115,7 @@ class RoomComponent extends React.Component<Props, State> {
         }
 
         this.setState({
-          room: doc.data() as Room,
+          room: doc.val() as Room,
         })
       }else{
         const initalData :Room = {
