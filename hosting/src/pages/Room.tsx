@@ -23,7 +23,7 @@ interface Props {
 interface State {
   room?: Room
   id: string
-  user?: firebase.User|null
+  user?: firebase.User
 }
 
 class RoomComponent extends React.Component<Props, State> {
@@ -54,7 +54,11 @@ class RoomComponent extends React.Component<Props, State> {
   }
 
   async onNameInput(name: string) {
-    await this.login()
+    await this.login().catch(err => {
+      alert("ログインできませんでした。もう一度試してください。");
+      return
+    })
+
     const docRef = firestore.collection("room").doc(this.state.id)
     docRef.get().then(doc => {
       if(doc.exists){
@@ -98,9 +102,11 @@ class RoomComponent extends React.Component<Props, State> {
       auth.onAuthStateChanged(user => {
         if(user){
           console.log(user)
-          this.setState({user:user})
+          this.setState({user})
+          resolve(user)
+        }else{
+          reject(null)
         }
-        resolve(user)
       })
     })
     
