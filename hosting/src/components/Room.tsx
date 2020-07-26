@@ -54,14 +54,16 @@ class RoomComponent extends React.Component<Props, State> {
   onNameInput(name: string) {
     const docRef = firestore.collection("room").doc(this.state.id)
     docRef.get().then(doc => {
-
       if(doc.exists){
         const stateData = doc.data() as Room
         stateData.users.push({userName: name, point: 0})
-        this.state = {
+        docRef.set(stateData)
+        .then(() => console.log("Document successfully written", stateData))
+        .catch(err => console.error("Writing docuemnt failed.: ", err))
+        this.setState({
           room: doc.data() as Room,
           id: this.state.id
-        }
+        })
       }else{
         const initalData :Room = {
           currentRound: {
@@ -77,14 +79,14 @@ class RoomComponent extends React.Component<Props, State> {
         }
         console.log(initalData)
         docRef.set(initalData)
-          .then(() => console.log("Document successfully written", initalData))
-          .catch(err => console.error("Writing docuemnt failed.: ", err))
-
-        this.state = {
+        .then(() => console.log("Document successfully written", initalData))
+        .catch(err => console.error("Writing docuemnt failed.: ", err))
+        this.setState({
           room: initalData,
           id: this.state.id
-        }
+        })
       }
+
     })
   }
 };
