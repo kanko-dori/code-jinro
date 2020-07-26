@@ -69,14 +69,7 @@ class RoomComponent extends React.Component<Props, State> {
       let newRoomState = this.state.room
       newRoomState.currentRound.code = code
       this.setState({room: newRoomState})
-      realtimeDB.ref('room/' + this.state.id + "/currentRound").update({code: code},
-        , e =>{
-        if(e){
-          console.error(e)
-        }else{
-          console.log(e)
-        }
-      })
+      realtimeDB.ref(`room/${this.state.id}/currentRound`).update({ code });
     }
   }
 
