@@ -1,7 +1,11 @@
-import React from 'react';
-import Editor from './Editor';
-import Problem from './Problem';
-import Users from './Users';
+import React from "react";
+
+import {
+} from "@material-ui/core";
+import NameInput from "./NameInput";
+import Editor from "./Editor";
+import Problem from "./Problem";
+import Users from "./Users";
 
 import "./Room.css";
 
@@ -19,6 +23,9 @@ class Room extends React.Component<Props, State> {
   render() {
     return (
       <div className="container">
+        <section className="name_input">
+          <NameInput onNameInput={this.onNameInput.bind(this)}></NameInput>
+        </section>
         <section className="editor">
           <Editor autocomplete={true}></Editor>
         </section>
@@ -30,6 +37,10 @@ class Room extends React.Component<Props, State> {
         </section>
       </div>
     );
+  }
+
+  onNameInput(name: string) {
+    this.setState({ name });
   }
 };
 export default Room;
