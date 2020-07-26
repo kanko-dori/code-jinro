@@ -21,7 +21,7 @@
     ],
     "rewrites": [ {
       "source": "**",
-      "destination": "/"
+      "destination": "/index.html"
     } ],
     "predeploy": [
       "npm --prefix \"hosting\" install",
