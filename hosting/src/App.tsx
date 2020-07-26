@@ -6,8 +6,8 @@ import {
   ThemeProvider
 } from "@material-ui/core";
 import Header from "./components/Header";
-import Home from "./components/Home";
-import Room from "./components/Room";
+import Home from "./pages/Home";
+import Room from "./pages/Room";
 import {
   BrowserRouter as Router,
   Switch,
