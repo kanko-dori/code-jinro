@@ -42,7 +42,7 @@ class RoomComponent extends React.Component<Props, State> {
           <NameInput onNameInput={this.onNameInput.bind(this)}></NameInput>
         </section>
         <section className={classes.editor}>
-          <Editor autocomplete={true}></Editor>
+          <Editor autocomplete={true} onCodeChange={this.onCodeChange.bind(this)} code={this.state.room? this.state.room.currentRound.code: ""}></Editor>
         </section>
         <section className={classes.problem}>
           <Problem url={"https://atcoder.jp/contests/abc047/tasks/abc047_a"}></Problem>
@@ -52,6 +52,18 @@ class RoomComponent extends React.Component<Props, State> {
         </section>
       </div>
     );
+  }
+
+  onCodeChange(code: string) {
+    console.log(code)
+    const docRef = firestore.collection("room").doc(this.state.id)
+
+    if(this.state.room){
+      let newRoomState = this.state.room
+      newRoomState.currentRound.code = code
+      this.setState({room: newRoomState})
+      docRef.set(this.state.room)
+    }
   }
 
   async onNameInput(name: string) {

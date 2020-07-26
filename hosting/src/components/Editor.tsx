@@ -15,6 +15,8 @@ languages.forEach(lang => {
 
 interface Props {
   autocomplete: boolean;
+  onCodeChange: (code: string) => void;
+  code: string
 }
 interface State {
   mode: string;
@@ -59,7 +61,8 @@ class Editor extends React.Component<Props, State> {
             tabSize: 4
           }}
           mode={this.state.mode}
-          onChange={this.onCodeChange}
+          onChange={e => this.onCodeChange(e)}
+          value={this.props.code}
         >
         </AceEditor>
       </div>
@@ -72,8 +75,8 @@ class Editor extends React.Component<Props, State> {
     });
   }
 
-  onCodeChange() {
-
+  onCodeChange(code: string) {
+    this.props.onCodeChange(code)
   }
 };
 export default Editor;
