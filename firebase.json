@@ -8,10 +8,9 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR/functions\" install",
-      "npm --prefix \"$RESOURCE_DIR/functions\" run build"
-    ],
-    "source": "functions"
+      "npm --prefix \"functions\" install",
+      "npm --prefix \"functions\" run build"
+    ]
   },
   "hosting": {
     "public": "hosting/build",
@@ -21,8 +20,8 @@
       "**/node_modules/**"
     ],
     "predeploy": [
-      "npm --prefix \"$PROJECT_DIR/hosting\" install",
-      "npm --prefix \"$PROJECT_DIR/hosting\" run build"
+      "npm --prefix \"hosting\" install",
+      "npm --prefix \"hosting\" run build"
     ]
   }
 }
