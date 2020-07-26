@@ -3,6 +3,8 @@ import Editor from './Editor';
 import Problem from './Problem';
 import Users from './Users';
 
+import { firestore } from '../tools/firebase';
+import { Room, RoundState } from '../types/types'
 import "./Room.css";
 
 interface Props {
@@ -13,9 +15,45 @@ interface Props {
     url: string;
   };
 }
-interface State {}
+interface State {
+  room: Room
+}
 
-class Room extends React.Component<Props, State> {
+class RoomComponent extends React.Component<Props, State> {
+  constructor(props: Props){
+    super(props);
+    
+    const docRef = firestore.collection("room").doc(props.match.params.id)
+    docRef.get().then(doc => {
+      if(doc.exists){
+        this.state = {
+          room: doc.data() as Room
+        }
+      }else{
+        const initalData :Room = {
+          currentRound: {
+            problemURL: "",
+            code:  "",
+          },
+          users: [{
+            userName: "taka",
+            point: 0
+          }],
+          currentState: RoundState.問題提示,
+          history: []
+        }
+        console.log(initalData)
+        docRef.set(initalData)
+          .then(() => console.log("Document successfully written", initalData))
+          .catch(err => console.error("Writing docuemnt failed.: ", err))
+
+        this.state = {
+          room: initalData
+        }
+      }
+    })
+  }
+
   render() {
     return (
       <div className="container">
@@ -32,4 +70,4 @@ class Room extends React.Component<Props, State> {
     );
   }
 };
-export default Room;
+export default RoomComponent;
