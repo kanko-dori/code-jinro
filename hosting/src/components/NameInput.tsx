@@ -36,7 +36,7 @@ class NameInput extends React.Component<Props, State> {
         open={this.state.open}
         style={{ outline: 'none' }}
       >
-        <div className={modalcontainer}>
+        <div className={classes.modalcontainer}>
           <form onSubmit={this.onNameSubmit}>
             <h3>Please input your name.</h3>
             <p>
