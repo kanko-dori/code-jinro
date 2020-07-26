@@ -3,7 +3,7 @@ import Editor from './Editor';
 import Problem from './Problem';
 import Users from './Users';
 
-import { firestore } from '../tools/firebase';
+import { firestore } from '../utils/firebase';
 import { Room, RoundState } from '../types/types'
 import "./Room.css";
 
