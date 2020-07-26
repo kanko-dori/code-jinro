@@ -33,6 +33,14 @@ class RoomComponent extends React.Component<Props, State> {
     this.state = {
       id: props.match.params.id,
     }
+    
+    const docRef = firestore.collection("room").doc(this.state.id)
+    docRef.onSnapshot(doc => {
+      const data = doc.data() as Room
+      console.log("onSnapshot: ", data)
+      this.setState({room: data})
+    })
+    
   }
 
   render() {
