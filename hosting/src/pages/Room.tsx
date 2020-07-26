@@ -9,6 +9,7 @@ import Users from "../components/Users";
 
 import { firestore, auth } from '../utils/firebase';
 import { Room, RoundState } from '../types/types';
+import { languages } from "../utils/constants";
 
 import classes from "./Room.module.css";
 
@@ -73,6 +74,7 @@ class RoomComponent extends React.Component<Props, State> {
       }else{
         const initalData :Room = {
           currentRound: {
+            language: languages[0],
             problemURL: "",
             code:  "",
           },
