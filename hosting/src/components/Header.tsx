@@ -6,14 +6,14 @@ import {
   Typography
 } from "@material-ui/core";
 
-import "./Header.css";
+import classes from "./Header.module.css";
 
 function Header() {
   return (
     <AppBar>
       <Toolbar>
         <Typography variant="h6">
-          <span className="title">Code JINRO</span>
+          <span className={classes.title}>Code JINRO</span>
         </Typography>
       </Toolbar>
     </AppBar>

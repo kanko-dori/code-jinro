@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "./Users.tsx";
+import classes from "./Users.module.css";
 
 interface Props {}
 interface State {
@@ -17,7 +17,7 @@ class Users extends React.Component<Props, State> {
   }
   render() {
     return (
-      <div className="container">
+      <div className={classes.container}>
         <ul>
           {
             this.state.users.map(user =>

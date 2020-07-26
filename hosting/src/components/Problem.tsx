@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "./Problem.css";
+import classes from "./Problem.module.css";
 
 interface Props {
   url: string;
@@ -10,7 +10,7 @@ interface State {}
 class Problem extends React.Component<Props, State> {
   render() {
     return (
-      <div className="container">
+      <div className={classes.container}>
         <iframe
           frameBorder="0"
           src={this.props.url}
