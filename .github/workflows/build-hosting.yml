@@ -1,0 +1,24 @@
+name: build-hosting
+on:
+  pull_request:
+    branches: [ master ]
+    paths:
+    - 'hosting/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
+        working-directory: hosting
+      - name: Create production build
+        run: npm run build
+        working-directory: hosting
+

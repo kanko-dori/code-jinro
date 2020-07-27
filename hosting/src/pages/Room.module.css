@@ -9,13 +9,13 @@ section {
 }
 .editor {
   height: 100vh;
-  width: 40vw;
+  width: 40%;
 }
 .problem {
   height: 100vh;
-  width: 40vw;
+  width: 40%;
 }
 .users {
   height: 100vh;
-  width: 19vw;
+  width: 19%;
 }
