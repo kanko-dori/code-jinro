@@ -16,4 +16,5 @@ const firebaseClient = firebase.initializeApp(firebaseConfig);
 
 export const firestore = firebaseClient.firestore();
 export const auth = firebaseClient.auth();
+export const realtimeDB = firebase.database();
 

@@ -7,7 +7,7 @@ import Editor from "../components/Editor";
 import Problem from "../components/Problem";
 import Users from "../components/Users";
 
-import { firestore, auth } from '../utils/firebase';
+import { realtimeDB, auth } from '../utils/firebase';
 import { Room, RoundState } from '../types/types';
 import { languages } from "../utils/constants";
 
@@ -33,6 +33,14 @@ class RoomComponent extends React.Component<Props, State> {
     this.state = {
       id: props.match.params.id,
     }
+    
+    const docRef = realtimeDB.ref('room/' + this.state.id)
+    docRef.on('value', doc => {
+      const data = doc.val() as Room
+      console.log("value: ", data)
+      this.setState({room: data})
+    })
+    
   }
 
   render() {
@@ -42,7 +50,7 @@ class RoomComponent extends React.Component<Props, State> {
           <NameInput onNameInput={this.onNameInput.bind(this)}></NameInput>
         </section>
         <section className={classes.editor}>
-          <Editor autocomplete={true}></Editor>
+          <Editor autocomplete={true} onCodeChange={this.onCodeChange.bind(this)} code={this.state.room? this.state.room.currentRound.code: ""}></Editor>
         </section>
         <section className={classes.problem}>
           <Problem url={"https://atcoder.jp/contests/abc047/tasks/abc047_a"}></Problem>
@@ -54,16 +62,29 @@ class RoomComponent extends React.Component<Props, State> {
     );
   }
 
+  onCodeChange(code: string) {
+    console.log(code)
+    // const docRef = firestore.collection("room").doc(this.state.id)
+    if(this.state.room){
+      let newRoomState = this.state.room
+      newRoomState.currentRound.code = code
+      this.setState({room: newRoomState})
+      realtimeDB.ref(`room/${this.state.id}/currentRound`).update({ code });
+    }
+  }
+
   async onNameInput(name: string) {
     await this.login().catch(err => {
       alert("ログインできませんでした。もう一度試してください。");
       return
     })
 
-    const docRef = firestore.collection("room").doc(this.state.id)
-    docRef.get().then(doc => {
-      if(doc.exists){
-        let stateData = doc.data() as Room
+    const docRef = realtimeDB.ref('room/' + this.state.id)
+    console.log(docRef)
+    docRef.once('value').then(doc => {
+      console.log(doc)
+      if(doc.exists()){
+        let stateData = doc.val() as Room
         const index = stateData.users.findIndex(u => u.userID === this.state.user?.uid)
         console.log(index)
 
@@ -87,7 +108,7 @@ class RoomComponent extends React.Component<Props, State> {
         }
 
         this.setState({
-          room: doc.data() as Room,
+          room: doc.val() as Room,
         })
       }else{
         const initalData :Room = {
