@@ -26,7 +26,6 @@ class Editor extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.onCodeChange = this.onCodeChange.bind(this);
     this.onLangChange = this.onLangChange.bind(this);
     this.state = {
       mode: languages[0]
@@ -61,7 +60,7 @@ class Editor extends React.Component<Props, State> {
             tabSize: 4
           }}
           mode={this.state.mode}
-          onChange={this.onCodeChange}
+          onChange={this.props.onCodeChange}
           value={this.props.code}
         >
         </AceEditor>
@@ -73,10 +72,6 @@ class Editor extends React.Component<Props, State> {
     this.setState({
       mode: event.target.value
     });
-  }
-
-  onCodeChange(code: string) {
-    this.props.onCodeChange(code)
   }
 };
 export default Editor;
