@@ -22,7 +22,7 @@ const theme = responsiveFontSizes(createMuiTheme({
     primary: {
       light: '#c8e3e9',
       main: '#86b3e0',
-      dark: '6f94cd',
+      dark: '#6f94cd',
     }
   }
 }));
