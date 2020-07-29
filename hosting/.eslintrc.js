@@ -38,6 +38,8 @@ module.exports = {
       },
     ],
     'react/jsx-filename-extension': [1, { extensions: ['.tsx', '.jsx'] }],
+    'react/destructuring-assignment': 'off',
+    'no-console': 'off'
   },
   settings: {
     'import/resolver': {
