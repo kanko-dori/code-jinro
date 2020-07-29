@@ -46,69 +46,69 @@ class RoomComponent extends React.Component<Props, State> {
   }
 
   onCodeChange(code: string):void {
-    console.log(code);
-    if (this.state.room) {
-      const newRoomState = this.state.room;
-      newRoomState.currentRound.code = code;
-      this.setState({ room: newRoomState });
-      realtimeDB.ref(`room/${this.state.id}/currentRound`).update({ code });
-    }
+    console.log({ code });
+    this.setState((prevState) => {
+      if (!prevState.room) return null;
+      realtimeDB.ref(`room/${prevState.id}/currentRound`).update({ code });
+      const { room } = prevState;
+      room.currentRound.code = code;
+      return { room };
+    });
   }
 
   async onNameInput(name: string):Promise<void> {
     await this.login().catch(() => {
+      // TODO: #39
       alert('ログインできませんでした。もう一度試してください。');
     });
 
     const docRef = realtimeDB.ref(`room/${this.state.id}`);
     console.log(docRef);
     docRef.once('value').then((doc) => {
-      console.log(doc);
-      if (doc.exists()) {
-        const stateData = doc.val() as Room;
-        const index = stateData.users.findIndex((u) => u.userID === this.state.user?.uid);
-        console.log(index);
+      console.log({ doc });
+      if (doc.exists()) { // exist room
+        const room = doc.val() as Room;
+        const selfUserIndex = room.users.findIndex((user) => user.userID === this.state.user?.uid);
+        console.log({ selfUserIndex });
 
-        if (index === -1) {
+        if (selfUserIndex === -1) {
           console.log('new user: ', name);
-          stateData.users.push({ userName: name, point: 0, userID: this.state.user ? this.state.user.uid : '' });
-          docRef.set(stateData)
-            .then(() => console.log('Document successfully written', stateData))
+          room.users.push({ userName: name, point: 0, userID: this.state.user ? this.state.user.uid : '' });
+          docRef.set(room)
+            .then(() => console.log('Document successfully written', room))
             .catch((err) => console.error('Writing docuemnt failed.: ', err));
-        } else if (stateData.users[index].userName === name) {
+        } else if (room.users[selfUserIndex].userName === name) {
           console.log('duplicate uid. skipping update firestore');
         } else {
           console.log('update to use new name');
-          stateData.users[index].userName = name;
-          docRef.set(stateData)
-            .then(() => console.log('Document successfully written', stateData))
+          room.users[selfUserIndex].userName = name;
+          docRef.set(room)
+            .then(() => console.log('Document successfully written', room))
             .catch((err) => console.error('Writing docuemnt failed.: ', err));
         }
 
-        this.setState({
-          room: doc.val() as Room,
-        });
-      } else {
-        const initalData :Room = {
-          currentRound: {
-            language: languages[0],
-            problemURL: '',
-            code: '',
-          },
-          users: [{
-            userName: name,
-            point: 0,
-            userID: this.state.user ? this.state.user.uid : '',
-          }],
-          currentState: RoundState.問題提示,
-          history: [],
-        };
-        console.log(initalData);
-        docRef.set(initalData)
-          .then(() => console.log('Document successfully written', initalData))
-          .catch((err) => console.error('Writing docuemnt failed.: ', err));
-        this.setState({
-          room: initalData,
+        this.setState({ room });
+      } else { // not exist room
+        this.setState((prevState) => {
+          const room :Room = {
+            currentRound: {
+              language: languages[0],
+              problemURL: '',
+              code: '',
+            },
+            users: [{
+              userName: name,
+              point: 0,
+              userID: prevState.user?.uid ?? '',
+            }],
+            currentState: RoundState.問題提示,
+            history: [],
+          };
+          console.log({ room });
+          docRef.set(room)
+            .then(() => console.log('Document successfully written', room))
+            .catch((err) => console.error('Writing docuemnt failed.: ', err));
+          return { room };
         });
       }
     });
