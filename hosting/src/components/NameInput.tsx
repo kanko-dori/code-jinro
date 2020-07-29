@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 import {
   Modal,
   TextField,
-  Button
-} from "@material-ui/core";
-import { ChangeEvent } from 'react';
+  Button,
+} from '@material-ui/core';
 
-import classes from "./NameInput.module.css";
+import classes from './NameInput.module.css';
 
 interface Props {
   onNameInput: (name: string) => void
@@ -19,6 +18,7 @@ interface State {
 
 class NameInput extends React.Component<Props, State> {
   textRef: React.RefObject<HTMLInputElement>;
+
   constructor(props: Props) {
     super(props);
 
@@ -26,10 +26,11 @@ class NameInput extends React.Component<Props, State> {
     this.onNameSubmit = this.onNameSubmit.bind(this);
     this.state = {
       open: true,
-      name: ''
+      name: '',
     };
-    this.textRef = React.createRef()
+    this.textRef = React.createRef();
   }
+
   render() {
     return (
       <Modal
@@ -46,7 +47,7 @@ class NameInput extends React.Component<Props, State> {
                 value={this.state.name}
                 onChange={this.onNameChange}
                 ref={this.textRef}
-              ></TextField>
+              />
             </p>
             <p><Button variant="contained" type="submit">Commit!</Button></p>
           </form>
@@ -54,6 +55,7 @@ class NameInput extends React.Component<Props, State> {
       </Modal>
     );
   }
+
   componentDidMount() {
     setTimeout(() => this.textRef.current?.focus(), 100);
   }
@@ -61,15 +63,16 @@ class NameInput extends React.Component<Props, State> {
   onNameChange(event: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) {
     console.log(event.target.value);
     this.setState({
-      name: event.target.value
+      name: event.target.value,
     });
   }
+
   onNameSubmit(event: React.FormEvent<HTMLFormElement>) {
     console.log(event);
     this.props.onNameInput(this.state.name);
     this.setState({
-      open: false
+      open: false,
     });
   }
-};
+}
 export default NameInput;

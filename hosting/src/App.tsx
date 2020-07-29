@@ -3,17 +3,17 @@ import React from 'react';
 import {
   createMuiTheme,
   responsiveFontSizes,
-  ThemeProvider
-} from "@material-ui/core";
-import Header from "./components/Header";
-import Home from "./pages/Home";
-import Room from "./pages/Room";
+  ThemeProvider,
+} from '@material-ui/core';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
-} from "react-router-dom";
+  Redirect,
+} from 'react-router-dom';
+import Header from './components/Header';
+import Home from './pages/Home';
+import Room from './pages/Room';
 
 import './App.css';
 
@@ -23,19 +23,19 @@ const theme = responsiveFontSizes(createMuiTheme({
       light: '#c8e3e9',
       main: '#86b3e0',
       dark: '#6f94cd',
-    }
-  }
+    },
+  },
 }));
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Header></Header>
+        <Header />
         <Switch>
-          <Route exact path="/" component={Home}></Route>
-          <Route path="/room/:id" component={Room}></Route>
-          <Redirect to="/"></Redirect>
+          <Route exact path="/" component={Home} />
+          <Route path="/room/:id" component={Room} />
+          <Redirect to="/" />
         </Switch>
       </Router>
     </ThemeProvider>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classes from "./Problem.module.css";
+import classes from './Problem.module.css';
 
 interface Props {
   url: string;
@@ -17,11 +17,10 @@ class Problem extends React.Component<Props, State> {
           title="Problem"
           sandbox="allow-scripts allow-same-origin"
           referrerPolicy="no-referrer"
-          onClick={e => e.preventDefault()}
-        >
-        </iframe>
+          onClick={(e) => e.preventDefault()}
+        />
       </div>
     );
   }
-};
+}
 export default Problem;

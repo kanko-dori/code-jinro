@@ -6,10 +6,10 @@ import {
   FormControl,
   FormLabel,
   FormControlLabel,
-  Button
-} from "@material-ui/core";
+  Button,
+} from '@material-ui/core';
 
-import classes from "./Users.module.css";
+import classes from './Users.module.css';
 
 interface Props {}
 interface State {
@@ -22,9 +22,10 @@ class Users extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      users: [ new User("Tom") ],
-    }
+      users: [new User('Tom')],
+    };
   }
+
   render() {
     return (
       <div className={classes.container}>
@@ -33,11 +34,9 @@ class Users extends React.Component<Props, State> {
             <FormLabel component="legend">Vote writing user</FormLabel>
             <RadioGroup value={this.state.voteUser} onChange={this.onRadioChange}>
               {
-                this.state.users.map(user =>
-                  <FormControlLabel key={user.name} value={user.name} control={<Radio />} label={user.name} />
-                )
+                this.state.users.map((user) => <FormControlLabel key={user.name} value={user.name} control={<Radio />} label={user.name} />)
               }
-              
+
             </RadioGroup>
           </FormControl>
           <p>
@@ -51,14 +50,16 @@ class Users extends React.Component<Props, State> {
   onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
     console.log(event);
   }
+
   onVoteUser(event: React.FormEvent<HTMLFormElement>) {
     console.log(event);
   }
-};
+}
 export default Users;
 
 class User {
   name: string;
+
   constructor(name: string) {
     this.name = name;
   }

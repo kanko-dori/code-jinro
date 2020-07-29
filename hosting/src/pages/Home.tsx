@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface Props {}
 interface State {}
 class Home extends React.Component<Props, State> {
@@ -9,5 +10,5 @@ class Home extends React.Component<Props, State> {
       </div>
     );
   }
-};
+}
 export default Home;
