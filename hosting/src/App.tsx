@@ -27,19 +27,17 @@ const theme = responsiveFontSizes(createMuiTheme({
   },
 }));
 
-function App(): JSX.Element {
-  return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/room/:id" component={Room} />
-          <Redirect to="/" />
-        </Switch>
-      </Router>
-    </ThemeProvider>
-  );
-}
+const App: React.FC = () => (
+  <ThemeProvider theme={theme}>
+    <Router>
+      <Header />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/room/:id" component={Room} />
+        <Redirect to="/" />
+      </Switch>
+    </Router>
+  </ThemeProvider>
+);
 
 export default App;
