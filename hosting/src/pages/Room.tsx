@@ -59,6 +59,7 @@ class RoomComponent extends React.Component<Props, State> {
   async onNameInput(name: string):Promise<void> {
     await this.login().catch(() => {
       // TODO: #39
+      // eslint-disable-next-line no-alert
       alert('ログインできませんでした。もう一度試してください。');
     });
 
