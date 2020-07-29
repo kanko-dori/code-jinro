@@ -12,7 +12,6 @@ import { User } from '../types/types';
 
 import classes from './Users.module.css';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
   users?: User[];
 }
