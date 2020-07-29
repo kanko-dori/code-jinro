@@ -31,7 +31,22 @@ class NameInput extends React.Component<Props, State> {
     this.textRef = React.createRef();
   }
 
-  render() {
+  onNameChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
+    console.log(event.target.value);
+    this.setState({
+      name: event.target.value,
+    });
+  }
+
+  onNameSubmit(event: React.FormEvent<HTMLFormElement>): void {
+    console.log(event);
+    this.props.onNameInput(this.state.name);
+    this.setState({
+      open: false,
+    });
+  }
+
+  render(): JSX.Element {
     return (
       <Modal
         open={this.state.open}
@@ -54,21 +69,6 @@ class NameInput extends React.Component<Props, State> {
         </div>
       </Modal>
     );
-  }
-
-  onNameChange(event: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) {
-    console.log(event.target.value);
-    this.setState({
-      name: event.target.value,
-    });
-  }
-
-  onNameSubmit(event: React.FormEvent<HTMLFormElement>) {
-    console.log(event);
-    this.props.onNameInput(this.state.name);
-    this.setState({
-      open: false,
-    });
   }
 }
 export default NameInput;

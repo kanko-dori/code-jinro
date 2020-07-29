@@ -8,7 +8,7 @@ import {
 
 import classes from './Header.module.css';
 
-function Header() {
+function Header(): JSX.Element {
   return (
     <AppBar>
       <Toolbar variant="dense">

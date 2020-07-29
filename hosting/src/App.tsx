@@ -27,7 +27,7 @@ const theme = responsiveFontSizes(createMuiTheme({
   },
 }));
 
-function App() {
+function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <Router>

@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 import React, { ChangeEvent } from 'react';
 import AceEditor from 'react-ace';
 
@@ -31,7 +33,13 @@ class Editor extends React.Component<Props, State> {
     };
   }
 
-  render() {
+  onLangChange(event: ChangeEvent<HTMLSelectElement>):void {
+    this.setState({
+      mode: event.target.value,
+    });
+  }
+
+  render(): JSX.Element {
     return (
       <div className={classes.container}>
         <select onChange={this.onLangChange} defaultValue={languages[0]}>
@@ -66,12 +74,6 @@ class Editor extends React.Component<Props, State> {
         </div>
       </div>
     );
-  }
-
-  onLangChange(event: ChangeEvent<HTMLSelectElement>) {
-    this.setState({
-      mode: event.target.value,
-    });
   }
 }
 export default Editor;

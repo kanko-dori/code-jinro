@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import React from 'react';
 
 import {
@@ -11,6 +12,7 @@ import {
 
 import classes from './Users.module.css';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
 interface State {
   users: User[];
@@ -26,7 +28,15 @@ class Users extends React.Component<Props, State> {
     };
   }
 
-  render() {
+  onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string):void {
+    console.log(event, value);
+  }
+
+  onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
+    console.log(event);
+  }
+
+  render(): JSX.Element {
     return (
       <div className={classes.container}>
         <form onSubmit={this.onVoteUser}>
@@ -45,14 +55,6 @@ class Users extends React.Component<Props, State> {
         </form>
       </div>
     );
-  }
-
-  onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string) {
-    console.log(event);
-  }
-
-  onVoteUser(event: React.FormEvent<HTMLFormElement>) {
-    console.log(event);
   }
 }
 export default Users;

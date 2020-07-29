@@ -42,28 +42,8 @@ class RoomComponent extends React.Component<Props, State> {
     });
   }
 
-  render() {
-    return (
-      <div className={classes.container}>
-        <section className={classes.name_input}>
-          <NameInput onNameInput={this.onNameInput.bind(this)} />
-        </section>
-        <section className={classes.editor}>
-          <Editor autocomplete onCodeChange={this.onCodeChange.bind(this)} code={this.state.room ? this.state.room.currentRound.code : ''} />
-        </section>
-        <section className={classes.problem}>
-          <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
-        </section>
-        <section className={classes.users}>
-          <Users />
-        </section>
-      </div>
-    );
-  }
-
-  onCodeChange(code: string) {
+  onCodeChange(code: string):void {
     console.log(code);
-    // const docRef = firestore.collection("room").doc(this.state.id)
     if (this.state.room) {
       const newRoomState = this.state.room;
       newRoomState.currentRound.code = code;
@@ -73,7 +53,7 @@ class RoomComponent extends React.Component<Props, State> {
   }
 
   async onNameInput(name: string) {
-    await this.login().catch((err) => {
+    await this.login().catch(() => {
       alert('ログインできませんでした。もう一度試してください。');
     });
 
@@ -131,7 +111,7 @@ class RoomComponent extends React.Component<Props, State> {
     });
   }
 
-  login() {
+  login():Promise<firebase.User> {
     return new Promise((resolve, reject) => {
       auth.signInAnonymously().catch((err) => console.error('Signin Anonymously failed: ', err));
       auth.onAuthStateChanged((user) => {
@@ -140,10 +120,29 @@ class RoomComponent extends React.Component<Props, State> {
           this.setState({ user });
           resolve(user);
         } else {
-          reject(null);
+          reject(new Error('unexpected error'));
         }
       });
     });
+  }
+
+  render():JSX.Element {
+    return (
+      <div className={classes.container}>
+        <section className={classes.name_input}>
+          <NameInput onNameInput={this.onNameInput} />
+        </section>
+        <section className={classes.editor}>
+          <Editor autocomplete onCodeChange={this.onCodeChange.bind} code={this.state.room ? this.state.room.currentRound.code : ''} />
+        </section>
+        <section className={classes.problem}>
+          <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
+        </section>
+        <section className={classes.users}>
+          <Users />
+        </section>
+      </div>
+    );
   }
 }
 export default RoomComponent;
