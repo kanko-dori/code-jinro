@@ -143,7 +143,7 @@ class RoomComponent extends React.Component<Props, State> {
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
         </section>
         <section className={classes.users}>
-          <Users />
+          <Users users={this.state.room?.users} />
         </section>
       </div>
     );
