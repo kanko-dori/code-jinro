@@ -56,10 +56,6 @@ class NameInput extends React.Component<Props, State> {
     );
   }
 
-  componentDidMount() {
-    setTimeout(() => this.textRef.current?.focus(), 100);
-  }
-
   onNameChange(event: ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) {
     console.log(event.target.value);
     this.setState({
