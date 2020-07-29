@@ -34,6 +34,9 @@ class RoomComponent extends React.Component<Props, State> {
       id: props.match.params.id,
     };
 
+    this.onCodeChange = this.onCodeChange.bind(this);
+    this.onNameInput = this.onNameInput.bind(this);
+
     const docRef = realtimeDB.ref(`room/${this.state.id}`);
     docRef.on('value', (doc) => {
       const data = doc.val() as Room;
@@ -52,7 +55,7 @@ class RoomComponent extends React.Component<Props, State> {
     }
   }
 
-  async onNameInput(name: string) {
+  async onNameInput(name: string):Promise<void> {
     await this.login().catch(() => {
       alert('ログインできませんでした。もう一度試してください。');
     });
@@ -133,7 +136,7 @@ class RoomComponent extends React.Component<Props, State> {
           <NameInput onNameInput={this.onNameInput} />
         </section>
         <section className={classes.editor}>
-          <Editor autocomplete onCodeChange={this.onCodeChange.bind} code={this.state.room ? this.state.room.currentRound.code : ''} />
+          <Editor autocomplete onCodeChange={this.onCodeChange} code={this.state.room ? this.state.room.currentRound.code : ''} />
         </section>
         <section className={classes.problem}>
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />

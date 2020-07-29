@@ -15,7 +15,7 @@ import classes from './Users.module.css';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
 interface State {
-  users: User[];
+  users: { name: string }[];
   voteUser?: string;
 }
 
@@ -24,15 +24,19 @@ class Users extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      users: [new User('Tom')],
+      users: [],
     };
   }
 
+  // eslint-disable-next-line class-methods-use-this
   onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string):void {
+    // TODO
     console.log(event, value);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
+    // TODO
     console.log(event);
   }
 
@@ -44,7 +48,14 @@ class Users extends React.Component<Props, State> {
             <FormLabel component="legend">Vote writing user</FormLabel>
             <RadioGroup value={this.state.voteUser} onChange={this.onRadioChange}>
               {
-                this.state.users.map((user) => <FormControlLabel key={user.name} value={user.name} control={<Radio />} label={user.name} />)
+                this.state.users.map((user) => (
+                  <FormControlLabel
+                    key={user.name}
+                    value={user.name}
+                    control={<Radio />}
+                    label={user.name}
+                  />
+                ))
               }
 
             </RadioGroup>
@@ -58,11 +69,3 @@ class Users extends React.Component<Props, State> {
   }
 }
 export default Users;
-
-class User {
-  name: string;
-
-  constructor(name: string) {
-    this.name = name;
-  }
-}
