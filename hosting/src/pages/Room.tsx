@@ -69,20 +69,20 @@ class RoomComponent extends React.Component<Props, State> {
       console.log({ doc });
       if (doc.exists()) { // exist room
         const room = doc.val() as Room;
-        const selfUserIndex = room.users.findIndex((user) => user.userID === this.state.user?.uid);
+        const selfUserIndex = room.users.findIndex((user) => user.id === this.state.user?.uid);
         console.log({ selfUserIndex });
 
         if (selfUserIndex === -1) {
           console.log('new user: ', name);
-          room.users.push({ userName: name, point: 0, userID: this.state.user ? this.state.user.uid : '' });
+          room.users.push({ name, point: 0, id: this.state.user?.uid ?? '' });
           docRef.set(room)
             .then(() => console.log('Document successfully written', room))
             .catch((err) => console.error('Writing docuemnt failed.: ', err));
-        } else if (room.users[selfUserIndex].userName === name) {
+        } else if (room.users[selfUserIndex].name === name) {
           console.log('duplicate uid. skipping update firestore');
         } else {
           console.log('update to use new name');
-          room.users[selfUserIndex].userName = name;
+          room.users[selfUserIndex].name = name;
           docRef.set(room)
             .then(() => console.log('Document successfully written', room))
             .catch((err) => console.error('Writing docuemnt failed.: ', err));
@@ -98,9 +98,9 @@ class RoomComponent extends React.Component<Props, State> {
               code: '',
             },
             users: [{
-              userName: name,
+              name,
               point: 0,
-              userID: prevState.user?.uid ?? '',
+              id: prevState.user?.uid ?? '',
             }],
             currentState: RoundState.問題提示,
             history: [],

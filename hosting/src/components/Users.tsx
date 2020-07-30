@@ -38,7 +38,7 @@ class Users extends React.Component<Props, State> {
   // eslint-disable-next-line class-methods-use-this
   onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
     event.preventDefault();
-    console.log('Vote:', this.props.users?.find((user) => user.userID === this.state.voteUserId)?.userName);
+    console.log('Vote:', this.props.users?.find((user) => user.id === this.state.voteUserId)?.name);
   }
 
   render(): JSX.Element {
@@ -51,10 +51,10 @@ class Users extends React.Component<Props, State> {
               {
                 (this.props.users ?? []).map((user) => (
                   <FormControlLabel
-                    key={user.userName + user.userID}
-                    value={user.userID}
+                    key={user.name + user.id}
+                    value={user.id}
                     control={<Radio />}
-                    label={user.userName}
+                    label={user.name}
                   />
                 ))
               }
