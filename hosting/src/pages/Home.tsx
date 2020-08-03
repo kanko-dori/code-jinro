@@ -1,11 +1,17 @@
 import React from 'react';
 
 import { Toolbar } from '@material-ui/core';
+import Rule from '../components/Rule'
 
-const Home: React.FC = () => (
-  <>
-    <Toolbar />
-    <div>contents</div>
-  </>
-);
+class Home extends React.Component {
+  render(): JSX.Element {
+    return (
+      <div>
+        <Toolbar />
+        <Rule />
+      </div>
+    )
+  };
+}
+
 export default Home;
