@@ -1,8 +1,11 @@
 import React from 'react';
 
+import { Toolbar } from '@material-ui/core';
+
 const Home: React.FC = () => (
-  <div>
-    HOME
-  </div>
+  <>
+    <Toolbar />
+    <div>contents</div>
+  </>
 );
 export default Home;
