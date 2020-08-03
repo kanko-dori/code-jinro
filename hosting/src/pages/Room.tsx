@@ -6,6 +6,7 @@ import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
 import Users from '../components/Users';
+import Stats from '../components/Stats';
 
 import { realtimeDB, auth } from '../utils/firebase';
 import { Room, RoundState } from '../types/types';
@@ -144,6 +145,9 @@ class RoomComponent extends React.Component<Props, State> {
         </section>
         <section className={classes.users}>
           <Users users={this.state.room?.users} />
+        </section>
+        <section className={classes.stats}>
+          <Stats onReady={() => { console.log('Ready'); }} />
         </section>
       </div>
     );
