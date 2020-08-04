@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Button } from '@material-ui/core';
+import { Button, Paper } from '@material-ui/core';
 
 const CreateRoom: React.FC = () => (
-	<div>
+	<Paper>
 		<h3>ゲーム開始</h3>
 		<Button variant="contained">CreateRoom</Button>
-	</div>
+	</Paper>
 );
 
 export default CreateRoom;

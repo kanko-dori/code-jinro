@@ -1,10 +1,12 @@
 import React from 'react';
 
+import { Paper } from '@material-ui/core';
+
 const Rule: React.FC = () => (
-	<div>
+	<Paper>
 		<h3>Rules</h3>
 		<div>ここにルールを記載</div>
-	</div>
+	</Paper>
 );
 
 export default Rule;

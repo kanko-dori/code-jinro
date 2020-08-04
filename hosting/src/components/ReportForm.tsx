@@ -1,18 +1,21 @@
 import React from 'react';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Card } from '@material-ui/core';
 
 const ReportForm: React.FC = () => (
-	<div>
-		<h3>バグ報告</h3>
-		<TextField label="Message" variant="outlined" />
-		<Button
-			variant="contained"
-			color="primary"
-		>
-			Send
+	<Card>
+		<form>
+			<h3>バグ報告</h3>
+			<TextField label="Message" variant="outlined" multiline />
+			<Button
+				variant="contained"
+				color="primary"
+				type="submit"
+			>
+				Send
 			</Button>
-	</div>
+		</form>
+	</Card>
 );
 
 export default ReportForm;
