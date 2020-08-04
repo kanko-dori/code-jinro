@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TextField, Button } from '@material-ui/core';
 
-const BugForm: React.FC = () => (
+const ReportForm: React.FC = () => (
 	<div>
 		<h3>バグ報告</h3>
 		<TextField label="Message" variant="outlined" />
@@ -15,4 +15,4 @@ const BugForm: React.FC = () => (
 	</div>
 );
 
-export default BugForm;
+export default ReportForm;
