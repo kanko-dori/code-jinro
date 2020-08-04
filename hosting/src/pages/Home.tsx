@@ -3,7 +3,7 @@ import React from 'react';
 import { Toolbar, Link, Container } from '@material-ui/core';
 import Rule from '../components/Rule';
 import CreateRoom from '../components/CreateRoom';
-import BugForm from '../components/BugForm';
+import ReportForm from '../components/ReportForm';
 
 const Home: React.FC = () => (
   <div>
@@ -11,7 +11,7 @@ const Home: React.FC = () => (
     <Container>
       <Rule />
       <CreateRoom />
-      <BugForm />
+      <ReportForm />
       <Link href="https://github.com/kanko-dori/code-jinro">GitHub</Link>
     </Container>
   </div>
