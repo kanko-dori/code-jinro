@@ -1,13 +1,18 @@
 import React from 'react';
 
-const BugForm: React.FC = () => {
-	return (
-		<div>
-			<h3>バグ報告</h3>
-			<textarea>メッセ欄？</textarea>
-			<button>送信</button>
-		</div>
-	);
-};
+import { TextField, Button } from '@material-ui/core';
+
+const BugForm: React.FC = () => (
+	<div>
+		<h3>バグ報告</h3>
+		<TextField label="Message" variant="outlined" />
+		<Button
+			variant="contained"
+			color="primary"
+		>
+			Send
+			</Button>
+	</div>
+);
 
 export default BugForm;
