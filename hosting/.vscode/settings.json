@@ -2,4 +2,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "editor.tabSize": 2,
+  "files.eol": "\n",
+  "files.trimFinalNewlines": true,
+  "files.insertFinalNewline": true,
 }
