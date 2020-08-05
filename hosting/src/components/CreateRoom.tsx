@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Button, Paper } from '@material-ui/core';
+import { Button, Paper, Typography } from '@material-ui/core';
 
 const CreateRoom: React.FC = () => (
   <Paper>
-    <h3>ゲーム開始</h3>
+    <Typography variant="h4">ゲーム開始</Typography>
     <Button variant="contained">CreateRoom</Button>
   </Paper>
 );
