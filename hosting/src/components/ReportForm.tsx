@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { TextField, Button, Card } from '@material-ui/core';
+import { TextField, Button, Card, Typography } from '@material-ui/core';
 
 const ReportForm: React.FC = () => (
   <Card>
     <form>
-      <h3>バグ報告</h3>
+      <Typography variant="h4">バグ報告</Typography>
       <TextField label="Message" variant="outlined" multiline />
       <Button
         variant="contained"
