@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { TextField, Button, Card, Typography, CardContent, CardActions } from '@material-ui/core';
+import {
+  TextField,
+  Button,
+  Card,
+  Typography,
+  CardContent,
+  CardActions,
+} from '@material-ui/core';
 
 const ReportForm: React.FC = () => (
   <Card>
@@ -16,7 +23,7 @@ const ReportForm: React.FC = () => (
           type="submit"
         >
           Send
-      </Button>
+        </Button>
       </CardActions>
     </form>
   </Card>
