@@ -4,7 +4,7 @@ import { Paper, Typography } from '@material-ui/core';
 
 const Rule: React.FC = () => (
   <Paper>
-    <Typography variant="h4">Rules</Typography>
+    <Typography variant="h5">Rules</Typography>
     <div>ここにルールを記載</div>
   </Paper>
 );

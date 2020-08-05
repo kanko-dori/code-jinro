@@ -4,7 +4,7 @@ import { Button, Paper, Typography } from '@material-ui/core';
 
 const CreateRoom: React.FC = () => (
   <Paper>
-    <Typography variant="h4">ゲーム開始</Typography>
+    <Typography variant="h5">ゲーム開始</Typography>
     <Button variant="contained">CreateRoom</Button>
   </Paper>
 );
