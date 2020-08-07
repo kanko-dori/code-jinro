@@ -22,56 +22,42 @@ interface Props {
   language: string;
 }
 
-class Editor extends React.Component<Props, unknown> {
-  constructor(props: Props) {
-    super(props);
+const Editor: React.FC<Props> = (props: Props) => (
+  <div className={classes.container}>
+    <select
+      onChange={(e) => props.onLangChange(e.target.value)}
+      value={props.language}
+    >
+      {
+        languages.map((lang) => (
+          <option
+            value={lang}
+            key={lang}
+          >
+            {lang}
+          </option>
+        ))
+      }
+    </select>
+    <div className={classes.wrapper}>
+      <AceEditor
+        theme="tomorrow"
+        name="code_editor"
+        fontSize={20}
+        style={{ width: '100%', height: '100%' }}
+        setOptions={{
+          enableBasicAutocompletion: props.autocomplete,
+          enableLiveAutocompletion: props.autocomplete,
+          enableSnippets: props.autocomplete,
+          showLineNumbers: true,
+          tabSize: 4,
+        }}
+        mode={props.language}
+        onChange={props.onCodeChange}
+        value={props.code}
+      />
+    </div>
+  </div>
+);
 
-    this.onLangChange = this.onLangChange.bind(this);
-  }
-
-  onLangChange(event: ChangeEvent<HTMLSelectElement>):void {
-    const lang = event.target.value;
-    this.props.onLangChange(lang);
-  }
-
-  render(): JSX.Element {
-    return (
-      <div className={classes.container}>
-        <select
-          onChange={(e) => this.props.onLangChange(e.target.value)}
-          value={this.props.language}
-        >
-          {
-            languages.map((lang) => (
-              <option
-                value={lang}
-                key={lang}
-              >
-                {lang}
-              </option>
-            ))
-          }
-        </select>
-        <div className={classes.wrapper}>
-          <AceEditor
-            theme="tomorrow"
-            name="code_editor"
-            fontSize={20}
-            style={{ width: '100%', height: '100%' }}
-            setOptions={{
-              enableBasicAutocompletion: this.props.autocomplete,
-              enableLiveAutocompletion: this.props.autocomplete,
-              enableSnippets: this.props.autocomplete,
-              showLineNumbers: true,
-              tabSize: 4,
-            }}
-            mode={this.props.language}
-            onChange={this.props.onCodeChange}
-            value={this.props.code}
-          />
-        </div>
-      </div>
-    );
-  }
-}
 export default Editor;
