@@ -6,6 +6,7 @@ import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
 import Users from '../components/Users';
+import Notification from '../components/Notification';
 
 import { realtimeDB, auth } from '../utils/firebase';
 import { Room, RoundState } from '../types/types';
@@ -25,6 +26,7 @@ interface State {
   room?: Room
   id: string
   user?: firebase.User
+  loginAlert: boolean
 }
 
 class RoomComponent extends React.Component<Props, State> {
@@ -32,6 +34,7 @@ class RoomComponent extends React.Component<Props, State> {
     super(props);
     this.state = {
       id: props.match.params.id,
+      loginAlert: false,
     };
 
     this.onCodeChange = this.onCodeChange.bind(this);
@@ -58,9 +61,7 @@ class RoomComponent extends React.Component<Props, State> {
 
   async onNameInput(name: string):Promise<void> {
     await this.login().catch(() => {
-      // TODO: #39
-      // eslint-disable-next-line no-alert
-      alert('ログインできませんでした。もう一度試してください。');
+      this.setState({ loginAlert: true });
     });
 
     const docRef = realtimeDB.ref(`room/${this.state.id}`);
@@ -145,6 +146,13 @@ class RoomComponent extends React.Component<Props, State> {
         <section className={classes.users}>
           <Users users={this.state.room?.users} />
         </section>
+        <Notification
+          open={this.state.loginAlert}
+          onClose={() => this.setState({ loginAlert: false })}
+          severnity="error"
+        >
+          ログインできませんでした。もう一度試してください。
+        </Notification>
       </div>
     );
   }
