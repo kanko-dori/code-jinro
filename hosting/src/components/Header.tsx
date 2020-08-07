@@ -76,6 +76,7 @@ class Header extends React.Component<unknown, State> {
           onClose={this.onSnackClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           severnity={this.state.snackSeverity}
+          variant="filled"
         >
           {this.state.copyResultMsg}
         </Notification>

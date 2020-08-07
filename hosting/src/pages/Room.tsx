@@ -150,6 +150,7 @@ class RoomComponent extends React.Component<Props, State> {
           open={this.state.loginAlert}
           onClose={() => this.setState({ loginAlert: false })}
           severnity="error"
+          variant="filled"
         >
           ログインできませんでした。もう一度試してください。
         </Notification>
