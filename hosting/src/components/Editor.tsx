@@ -1,6 +1,6 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import AceEditor from 'react-ace';
 
 import 'ace-builds/src-noconflict/ext-language_tools';
