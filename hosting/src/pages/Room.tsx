@@ -157,7 +157,7 @@ class RoomComponent extends React.Component<Props, State> {
             onCodeChange={this.onCodeChange}
             onLangChange={this.onLangChange}
             code={this.state.room ? this.state.room.currentRound.code : ''}
-            language={this.state.room ? this.state.room.currentRound.code : languages[0]}
+            language={this.state.room ? this.state.room.currentRound.language : languages[0]}
           />
         </section>
         <section className={classes.problem}>
