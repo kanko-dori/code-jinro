@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Share } from '@material-ui/icons';
+import Notification from './Notification';
 import Spacer from './Spacer';
 import { copyText } from '../utils/util';
 import classes from './Header.module.css';
@@ -39,11 +40,13 @@ class Header extends React.Component<unknown, State> {
       this.setState({
         copySnackOpen: true,
         snackSeverity: 'success',
+        copyResultMsg: 'Copied URL!',
       });
     } catch (e) {
       this.setState({
         copySnackOpen: true,
         snackSeverity: 'error',
+        copyResultMsg: 'Failed copy.',
       });
     }
   }
@@ -67,16 +70,15 @@ class Header extends React.Component<unknown, State> {
           </IconButton>
         </Toolbar>
 
-        <Snackbar
+        <Notification
           open={this.state.copySnackOpen}
           autoHideDuration={2000}
           onClose={this.onSnackClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          severnity={this.state.snackSeverity}
         >
-          <Alert onClose={this.onSnackClose} severity={this.state.snackSeverity}>
-            {this.state.copyResultMsg}
-          </Alert>
-        </Snackbar>
+          {this.state.copyResultMsg}
+        </Notification>
       </AppBar>
     );
   }
