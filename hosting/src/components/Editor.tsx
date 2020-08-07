@@ -18,34 +18,29 @@ interface Props {
   autocomplete: boolean;
   onCodeChange: (code: string) => void;
   onLangChange: (language: string) => void;
-  code: string
-}
-interface State {
-  mode: string;
+  code: string;
+  language: string;
 }
 
-class Editor extends React.Component<Props, State> {
+class Editor extends React.Component<Props, unknown> {
   constructor(props: Props) {
     super(props);
 
     this.onLangChange = this.onLangChange.bind(this);
-    this.state = {
-      mode: languages[0],
-    };
   }
 
   onLangChange(event: ChangeEvent<HTMLSelectElement>):void {
     const lang = event.target.value;
-    this.setState({
-      mode: lang,
-    });
     this.props.onLangChange(lang);
   }
 
   render(): JSX.Element {
     return (
       <div className={classes.container}>
-        <select onChange={this.onLangChange} defaultValue={languages[0]}>
+        <select
+          onChange={(e) => this.props.onLangChange(e.target.value)}
+          value={this.props.language}
+        >
           {
             languages.map((lang) => (
               <option
@@ -70,7 +65,7 @@ class Editor extends React.Component<Props, State> {
               showLineNumbers: true,
               tabSize: 4,
             }}
-            mode={this.state.mode}
+            mode={this.props.language}
             onChange={this.props.onCodeChange}
             value={this.props.code}
           />
