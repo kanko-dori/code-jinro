@@ -1,10 +1,11 @@
 .container {
   display: grid;
   height: 100vh;
-  grid-template-rows: 1fr;
+  grid-template-rows: 2fr 1fr;
   grid-template-columns: 2fr 2fr 1fr;
-  grid-template-areas: 
-    "editor problem users";
+  grid-template-areas:
+    "editor problem users"
+    "editor problem stats";
 }
 
 .container section {
@@ -19,4 +20,7 @@
 }
 .users {
   grid-area: users;
+}
+.stats {
+  grid-area: stats;
 }
