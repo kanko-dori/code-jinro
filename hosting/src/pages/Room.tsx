@@ -38,7 +38,7 @@ class RoomComponent extends React.Component<Props, State> {
     this.onCodeChange = this.onCodeChange.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
-    const docRef = realtimeDB.ref(`room/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${this.state.id}`);
     docRef.on('value', (doc) => {
       const data = doc.val() as Room;
       console.log('value: ', data);
@@ -50,7 +50,7 @@ class RoomComponent extends React.Component<Props, State> {
     console.log({ code });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`room/${prevState.id}/currentRound`).update({ code });
+      realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${prevState.id}/currentRound`).update({ code });
       const { room } = prevState;
       room.currentRound.code = code;
       return { room };
@@ -64,7 +64,7 @@ class RoomComponent extends React.Component<Props, State> {
       alert('ログインできませんでした。もう一度試してください。');
     });
 
-    const docRef = realtimeDB.ref(`room/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${this.state.id}`);
     console.log(docRef);
     docRef.once('value').then((doc) => {
       console.log({ doc });
