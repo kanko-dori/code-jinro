@@ -5,9 +5,7 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  Snackbar,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 import { Share } from '@material-ui/icons';
 import Notification from './Notification';
 import Spacer from './Spacer';
