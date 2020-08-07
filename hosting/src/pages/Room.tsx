@@ -152,7 +152,13 @@ class RoomComponent extends React.Component<Props, State> {
           <NameInput onNameInput={this.onNameInput} />
         </section>
         <section className={classes.editor}>
-          <Editor autocomplete onCodeChange={this.onCodeChange} onLangChange={this.onLangChange} code={this.state.room ? this.state.room.currentRound.code : ''} />
+          <Editor
+            autocomplete
+            onCodeChange={this.onCodeChange}
+            onLangChange={this.onLangChange}
+            code={this.state.room ? this.state.room.currentRound.code : ''}
+            language={this.state.room ? this.state.room.currentRound.code : languages[0]}
+          />
         </section>
         <section className={classes.problem}>
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
