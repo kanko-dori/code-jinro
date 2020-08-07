@@ -6,6 +6,7 @@ import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
 import Users from '../components/Users';
+import Stats from '../components/Stats';
 
 import { realtimeDB, auth } from '../utils/firebase';
 import { Room, RoundState } from '../types/types';
@@ -37,7 +38,7 @@ class RoomComponent extends React.Component<Props, State> {
     this.onCodeChange = this.onCodeChange.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
-    const docRef = realtimeDB.ref(`room/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${this.state.id}`);
     docRef.on('value', (doc) => {
       const data = doc.val() as Room;
       console.log('value: ', data);
@@ -49,7 +50,7 @@ class RoomComponent extends React.Component<Props, State> {
     console.log({ code });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`room/${prevState.id}/currentRound`).update({ code });
+      realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${prevState.id}/currentRound`).update({ code });
       const { room } = prevState;
       room.currentRound.code = code;
       return { room };
@@ -63,7 +64,7 @@ class RoomComponent extends React.Component<Props, State> {
       alert('ログインできませんでした。もう一度試してください。');
     });
 
-    const docRef = realtimeDB.ref(`room/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${this.state.id}`);
     console.log(docRef);
     docRef.once('value').then((doc) => {
       console.log({ doc });
@@ -144,6 +145,9 @@ class RoomComponent extends React.Component<Props, State> {
         </section>
         <section className={classes.users}>
           <Users users={this.state.room?.users} />
+        </section>
+        <section className={classes.stats}>
+          <Stats onReady={() => { console.log('Ready'); }} />
         </section>
       </div>
     );
