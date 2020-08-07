@@ -2,7 +2,7 @@ import React from 'react';
 
 const EyeCatching: React.FC = () => (
   <div>
-    <img alt='' src='' />
+    <img alt="" src="" />
   </div>
 );
 
