@@ -24,9 +24,9 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "start": "REACT_APP_STAGE=dev react-scripts start",
-    "build": "REACT_APP_STAGE=production react-scripts build",
-    "build:staging": "REACT_APP_STAGE=staging react-scripts build",
+    "start": "cross-env REACT_APP_STAGE=dev react-scripts start",
+    "build": "cross-env REACT_APP_STAGE=production react-scripts build",
+    "build:staging": "cross-env REACT_APP_STAGE=staging react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx ./src",
@@ -47,6 +47,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
+    "cross-env": "^7.0.2",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
