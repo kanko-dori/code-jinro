@@ -17,6 +17,7 @@ languages.forEach((lang) => {
 interface Props {
   autocomplete: boolean;
   onCodeChange: (code: string) => void;
+  onLangChange: (language: string) => void;
   code: string
 }
 interface State {
@@ -34,9 +35,11 @@ class Editor extends React.Component<Props, State> {
   }
 
   onLangChange(event: ChangeEvent<HTMLSelectElement>):void {
+    const lang = event.target.value;
     this.setState({
-      mode: event.target.value,
+      mode: lang,
     });
+    this.props.onLangChange(lang);
   }
 
   render(): JSX.Element {

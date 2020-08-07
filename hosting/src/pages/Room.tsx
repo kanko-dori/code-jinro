@@ -28,6 +28,8 @@ interface State {
   user?: firebase.User
 }
 
+const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/room`;
+
 class RoomComponent extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -35,10 +37,11 @@ class RoomComponent extends React.Component<Props, State> {
       id: props.match.params.id,
     };
 
+    this.onLangChange = this.onLangChange.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
-    const docRef = realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
     docRef.on('value', (doc) => {
       const data = doc.val() as Room;
       console.log('value: ', data);
@@ -46,11 +49,22 @@ class RoomComponent extends React.Component<Props, State> {
     });
   }
 
+  onLangChange(language: string):void {
+    console.log({ language });
+    this.setState((prevState) => {
+      if (!prevState.room) return null;
+      realtimeDB.ref(`${ROOMS_PATH}/${prevState.id}/currentRound`).update({ language });
+      const { room } = prevState;
+      room.currentRound.language = language;
+      return { room };
+    });
+  }
+
   onCodeChange(code: string):void {
     console.log({ code });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${prevState.id}/currentRound`).update({ code });
+      realtimeDB.ref(`${ROOMS_PATH}/${prevState.id}/currentRound`).update({ code });
       const { room } = prevState;
       room.currentRound.code = code;
       return { room };
@@ -64,7 +78,7 @@ class RoomComponent extends React.Component<Props, State> {
       alert('ログインできませんでした。もう一度試してください。');
     });
 
-    const docRef = realtimeDB.ref(`${process.env.REACT_APP_STAGE}/room/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
     console.log(docRef);
     docRef.once('value').then((doc) => {
       console.log({ doc });
@@ -138,7 +152,7 @@ class RoomComponent extends React.Component<Props, State> {
           <NameInput onNameInput={this.onNameInput} />
         </section>
         <section className={classes.editor}>
-          <Editor autocomplete onCodeChange={this.onCodeChange} code={this.state.room ? this.state.room.currentRound.code : ''} />
+          <Editor autocomplete onCodeChange={this.onCodeChange} onLangChange={this.onLangChange} code={this.state.room ? this.state.room.currentRound.code : ''} />
         </section>
         <section className={classes.problem}>
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
