@@ -7,7 +7,7 @@ type AlertType = 'error' | 'warning' | 'info' | 'success';
 interface Props {
   open: boolean;
   onClose: () => void;
-  autoHideDuration?: number;
+  autoHideDuration?: number | null;
   severnity: AlertType;
   children: React.ReactNode;
   anchorOrigin?: { horizontal: 'center' | 'left' | 'right', vertical: 'bottom' | 'top' },
@@ -34,7 +34,7 @@ const Notification: React.FC<Props> = (props: Props) => (
 );
 
 Notification.defaultProps = {
-  autoHideDuration: 3000,
+  autoHideDuration: null,
   anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
   color: undefined,
   variant: 'standard',
