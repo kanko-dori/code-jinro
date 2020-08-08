@@ -19,10 +19,16 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [ {
-      "source": "**",
-      "destination": "/index.html"
-    } ],
+    "rewrites": [ 
+      {
+        "source": "/api",
+        "function": "api"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+  ],
     "predeploy": [
       "npm --prefix \"hosting\" install",
       "npm --prefix \"hosting\" run build"
