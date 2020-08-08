@@ -55,36 +55,15 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 {}
 ```
 
-#### エラー（`:roomId`が存在しない）
+#### エラー
 
-- status: `404`
-- message: `Room Not Found`
-
-#### エラー（`uid`が存在しない）
-
-- status: `401`
-- message: `Unauthenticated User`
-
-#### エラー（`name`が不正）
-
-`name`は1字以上かつ20字以下である必要が有ります。
-
-- status: `400`
-- message: `Invalid Name`
-
-#### エラー（`name`が重複）
-
-`name`はルーム内で一意である必要が有ります。
-
-- status: `409`
-- message: `Conflict Username`
-
-#### エラー（すでに入室済み）
-
-`Room.users`に`uid`が存在していない必要が有ります。
-
-- status: `400`
-- message: `Already Entered`
+|type|code|message|備考|
+|---|---|---|---|
+|`:roomId`が存在しない|404|Room Not Found||
+|`uid`が存在しない|401|Unauthenticated User||
+|`name`が不正|400|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
+|`name`が重複|409|Conflict Name|`name`はルーム内で一意である必要が有る|
+|すでに入室済み|400|Already Entered|`Room.users`に`uid`が存在していない必要が有る|
 
 ## `PUT /api/:stage/:roomId/ready`
 
@@ -118,34 +97,15 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 {}
 ```
 
-#### エラー（`:roomId`が存在しない）
+#### エラー
 
-- status: `404`
-- message: `Room Not Found`
-
-#### エラー（`uid`が存在しない）
-
-- status: `401`
-- message: `Unauthenticated User`
-
-#### エラー（`secret`が誤っている）
-
-- status: `401`
-- message: `Invalid Secret`
-
-#### エラー（`RoomState`が`playing`）
-
-`RoomState`が`waiting`のときのみreadyできます。
-
-- status: `400`
-- message: `Playing Room`
-
-#### エラー（すでにReady済み）
-
-`UserState`が`pending`のときのみreadyできます。
-
-- status: `400`
-- message: `Already Ready`
+|type|code|message|備考|
+|---|---|---|---|
+|`:roomId`が存在しない|404|Room Not Found||
+|`uid`が存在しない|401|Unauthenticated User||
+|`secret`が誤っている|401|Invalid Secret||
+|`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
+|すでにReady済み|400|Already Ready|`UserState`が`pending`のときのみreadyできる|
 
 ## `POST /api/:stage/:roomId/answer`
 
@@ -156,6 +116,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 ```json
 {
   "uid": "{userId}",
-  "answer": "{answerUser}
+  "answer": "{answerUser}"
 }
 ```
