@@ -11,4 +11,4 @@ export const languages = [
   'ruby',
   'rust',
   'php',
-];
+] as const;
