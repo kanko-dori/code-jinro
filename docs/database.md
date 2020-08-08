@@ -50,7 +50,8 @@ type User = {
   name: string, // 0 < length <= 20
   id: UserId,
   points: number,
-  state: UserState
+  state: UserState,
+  secret: string
 };
 type UserID = string; // firebase.User.uid
 type UserState = 'pending' | 'ready' | 'playing';
