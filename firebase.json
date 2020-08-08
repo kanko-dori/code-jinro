@@ -21,12 +21,12 @@
     ],
     "rewrites": [ 
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/api",
+        "destination": "api"
       },
       {
-        "source": "/api",
-        "destination": "https://us-central1-code-jinro.cloudfunctions.net/api/"
+        "source": "**",
+        "destination": "/index.html"
       }
   ],
     "predeploy": [
