@@ -1,3 +1,5 @@
+import { languages } from '../utils/constants';
+
 export type Room = {
   currentRound: Round,
   users: User[],
@@ -24,3 +26,5 @@ export enum RoundState {
   回答中,
   正解
 }
+
+export type Language = typeof languages[number];

@@ -12,5 +12,3 @@ export const languages = [
   'rust',
   'php',
 ] as const;
-
-export type Language = typeof languages[number];
