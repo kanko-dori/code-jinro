@@ -1,31 +1,19 @@
 import * as functions from 'firebase-functions';
-import {Room, RoundState} from './types/types'
-import {languages} from './utils/constants'
-// Import Admin SDK
-// import * as admin from 'firebase-admin'
+import * as firebase from 'firebase-admin';
 
-// // Attach an asynchronous callback to read the data at our posts reference
-// ref.on("value", function(snapshot) {
-//   console.log(snapshot.val());
-// }, function (errorObject) {
-//   console.log("The read failed: " + errorObject.code);
-// });
+import * as express from 'express';
+// import * as cors from 'cors';
+import * as handler from './handler'
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+const app = express();
+// app.use(cors);
+firebase.initializeApp();
 
-export const createNewRoom = functions.https.onRequest((request: functions.Request, response: functions.Response) => {
-    const newRoom :Room = {
-        currentRound: {
-          language: languages[0],
-          problemURL: '',
-          code: '',
-        },
-        users: [],
-        currentState: RoundState.問題提示,
-        history: [],
-      };
-      console.log({ newRoom });
+app.get('/', handler.ping);
 
-    response.send(newRoom);
-});
+app.put('/room/:stage', handler.createNewRoom);
+
+// // Start writing Firebase Functions
+// // https://firebase.google.com/docs/functions/typescript
+//
+exports.api = functions.https.onRequest(app);
