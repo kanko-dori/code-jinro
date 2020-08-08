@@ -10,7 +10,7 @@ export type Room = {
 export type Round = {
   problemURL: string
   code: string
-  language: string
+  language: Language
   writer?: User
   winner?: User
 }
