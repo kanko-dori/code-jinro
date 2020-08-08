@@ -11,7 +11,7 @@ firebase.initializeApp();
 
 app.get('/', handler.ping);
 
-app.put('/room/:stage', handler.createNewRoom);
+app.post('/room/:stage', handler.createNewRoom);
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
