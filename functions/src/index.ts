@@ -1,4 +1,6 @@
 import * as functions from 'firebase-functions';
+import {Room, RoundState} from './types/types'
+import {languages} from './utils/constants'
 // Import Admin SDK
 // import * as admin from 'firebase-admin'
 
@@ -13,20 +15,17 @@ import * as functions from 'firebase-functions';
 // https://firebase.google.com/docs/functions/typescript
 
 export const createNewRoom = functions.https.onRequest((request: functions.Request, response: functions.Response) => {
-    // Get a database reference to our posts
-    const uid = generateRandomID(10);
-    // reques
-    functions.logger.info(uid, { structuredData: true });
-    response.send(uid);
+    const newRoom :Room = {
+        currentRound: {
+          language: languages[0],
+          problemURL: '',
+          code: '',
+        },
+        users: [],
+        currentState: RoundState.問題提示,
+        history: [],
+      };
+      console.log({ newRoom });
+
+    response.send(newRoom);
 });
-
-
-const generateRandomID = (length: number) => {
-    let result           = '';
-    const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
- }
