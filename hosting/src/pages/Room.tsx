@@ -10,7 +10,7 @@ import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 
 import { realtimeDB, auth } from '../utils/firebase';
-import { Room, RoundState } from '../types/types';
+import { Room, RoundState, Language } from '../types/types';
 import { languages } from '../utils/constants';
 
 import classes from './Room.module.css';
@@ -52,7 +52,7 @@ class RoomComponent extends React.Component<Props, State> {
     });
   }
 
-  onLangChange(language: string):void {
+  onLangChange(language: Language):void {
     console.log({ language });
     this.setState((prevState) => {
       if (!prevState.room) return null;

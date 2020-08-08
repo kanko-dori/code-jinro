@@ -8,6 +8,7 @@ import 'ace-builds/src-noconflict/theme-tomorrow';
 
 import classes from './Editor.module.css';
 import { languages } from '../utils/constants';
+import { Language } from '../types/types';
 
 languages.forEach((lang) => {
   require(`ace-builds/src-noconflict/mode-${lang}`);
@@ -17,15 +18,15 @@ languages.forEach((lang) => {
 interface Props {
   autocomplete: boolean;
   onCodeChange: (code: string) => void;
-  onLangChange: (language: string) => void;
+  onLangChange: (language: Language) => void;
   code: string;
-  language: string;
+  language: Language;
 }
 
 const Editor: React.FC<Props> = (props: Props) => (
   <div className={classes.container}>
     <select
-      onChange={(e) => props.onLangChange(e.target.value)}
+      onChange={(e) => props.onLangChange(e.target.value as Language)}
       value={props.language}
     >
       {
