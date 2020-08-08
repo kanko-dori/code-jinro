@@ -18,7 +18,7 @@ export const createNewRoom = (request: functions.Request, response: functions.Re
     }
 
     const realtimeDB = firebase.database();
-    const roomsRef = realtimeDB.ref(`${stage}`);
+    const roomsRef = realtimeDB.ref(`${stage}/room`);
     const newRoomRef = roomsRef.push();
     const newRoom :Room = {
         currentRound: {
