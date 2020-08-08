@@ -72,9 +72,25 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 - status: `409`
 - message: `Conflict Username`
 
+#### エラー（すでに入室済み）
+
+`Room.users`に`uid`が存在していない必要が有ります。
+
+- status: `400`
+- message: `Already Entered`
+
 ## `PUT /api/:stage/:roomId/ready`
 
 自身の`UserState`を`ready`にします。
+
+全員の`UserState`が`ready`になったとき以下を設定します。
+
+- `History`に`currentRound`をプッシュ
+- `currentRound`の初期化
+  - `problemUrl`を設定
+  - `code`をクリア
+  - `writer`をランダムに設定
+  - `winner`をクリア
 
 ### リクエスト
 
@@ -94,6 +110,11 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 {}
 ```
 
+#### エラー（`:roomId`が存在しない）
+
+- status: `404`
+- message: `Room Not Found`
+
 #### エラー（`uid`が存在しない）
 
 - status: `401`
@@ -105,3 +126,23 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 - status: `400`
 - message: `Playing Room`
+
+#### エラー（すでにReady済み）
+
+`UserState`が`pending`のときのみreadyできます。
+
+- status: `400`
+- message: `Already Ready`
+
+## `POST /api/:stage/:roomId/answer`
+
+`writer`でないユーザーが回答します。
+
+### リクエスト
+
+```json
+{
+  "uid": "{userId}",
+  "answer": "{answerUser}
+}
+```
