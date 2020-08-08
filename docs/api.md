@@ -29,6 +29,13 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ルームへの入場を宣言する。
 
+リクエストが適切な場合、以下を設定。
+
+- user.nameをリクエスト`name`から設定
+- user.pointsを`0`に設定
+- user.stateを`pending`に設定
+- user.secretを`crypto.randomBytes->toString`で生成・設定
+
 ### リクエスト
 
 ```json
@@ -81,9 +88,9 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ## `PUT /api/:stage/:roomId/ready`
 
-自身の`UserState`を`ready`にします。
+自身の`UserState`を`ready`にする。
 
-全員の`UserState`が`ready`になったとき以下を設定します。
+全員の`UserState`が`ready`になったとき以下を設定。
 
 - `History`に`currentRound`をプッシュ
 - `currentRound`の初期化
@@ -96,7 +103,8 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
-  "uid": "{userId}"
+  "uid": "{userId}",
+  "secret": "{userSecret}"
 }
 ```
 
@@ -120,6 +128,11 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 - status: `401`
 - message: `Unauthenticated User`
 
+#### エラー（`secret`が誤っている）
+
+- status: `401`
+- message: `Invalid Secret`
+
 #### エラー（`RoomState`が`playing`）
 
 `RoomState`が`waiting`のときのみreadyできます。
@@ -136,7 +149,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ## `POST /api/:stage/:roomId/answer`
 
-`writer`でないユーザーが回答します。
+`writer`でないユーザーが回答する。
 
 ### リクエスト
 
