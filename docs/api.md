@@ -11,7 +11,7 @@
 
 を返却する。
 
-## `GET /api/:stage/roomid`
+## `POST /api/:stage/room`
 
 ルーム作成し、ルームIDを返す。
 
