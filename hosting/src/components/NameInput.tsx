@@ -14,6 +14,7 @@ interface Props {
 interface State {
   open: boolean;
   name: string;
+  invalidName: boolean;
 }
 
 class NameInput extends React.Component<Props, State> {
@@ -27,19 +28,22 @@ class NameInput extends React.Component<Props, State> {
     this.state = {
       open: true,
       name: '',
+      invalidName: false,
     };
     this.textRef = React.createRef();
   }
 
   onNameChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
-    console.log(event.target.value);
+    const name = event.target.value;
     this.setState({
-      name: event.target.value,
+      name,
+      invalidName: (name.length > 20),
     });
   }
 
   onNameSubmit(event: React.FormEvent<HTMLFormElement>): void {
-    console.log(event);
+    event.preventDefault();
+    if (this.state.name.length > 20) return;
     this.props.onNameInput(this.state.name);
     this.setState({
       open: false,
@@ -62,6 +66,8 @@ class NameInput extends React.Component<Props, State> {
                 value={this.state.name}
                 onChange={this.onNameChange}
                 ref={this.textRef}
+                error={this.state.invalidName}
+                helperText={this.state.invalidName && 'Name must be 20 characters or less'}
               />
             </p>
             <p><Button variant="contained" type="submit">Commit!</Button></p>
