@@ -8,7 +8,7 @@ import ReportForm from '../components/ReportForm';
 const Home: React.FC = () => (
   <div>
     <Toolbar />
-    <Container>
+    <Container maxWidth="md">
       <Rule />
       <CreateRoom />
       <ReportForm />

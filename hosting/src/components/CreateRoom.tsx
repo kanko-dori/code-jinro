@@ -1,7 +1,12 @@
 import React from 'react';
-import { Button, Paper, Typography } from '@material-ui/core';
+import {
+  Button, Card, CardContent, Typography,
+} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { Room } from '../types/types';
+import Spacer from './Spacer';
+
+import classes from './CreateRoom.module.css';
 
 type response = {
   room: Room,
@@ -24,10 +29,16 @@ const CreateRoom: React.FC = () => {
   };
 
   return (
-    <Paper>
-      <Typography variant="h5">ゲーム開始</Typography>
-      <Button variant="contained" onClick={handleClick}>CreateRoom</Button>
-    </Paper>
+    <Card className={classes.container}>
+      <CardContent>
+        <Typography variant="h4">ゲーム開始</Typography>
+        <div className={classes.flex}>
+          <Spacer />
+          <Button variant="outlined" size="large" color="inherit" onClick={handleClick}>ルーム作成</Button>
+          <Spacer />
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
