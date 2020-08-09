@@ -52,7 +52,6 @@ type RoomUsers = {
 ```typescript
 type User = {
   name: string, // 0 < length <= 20
-  id: UserId,
   points: number,
   state: UserState,
   secret: string
