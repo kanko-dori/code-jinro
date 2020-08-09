@@ -9,11 +9,29 @@
           ".read": "data.child('users').child(auth.uid).exists()",
           "currentRound": {
             "code": {
-              ".write": "auth.uid === data.parent().child('writer').val()"
+              ".write": "auth.uid === data.parent().child('writer').val()",
+              ".validate": "newData.isString()"
             },
             "language": {
-              ".write": "auth.uid === data.parent().child('writer').val()"
+              ".write": "auth.uid === data.parent().child('writer').val()",
+              ".validate": "newData.isString()"
             }
+          },
+          "users": {
+            "$userId": {
+              "name": {
+                ".validate": "newData.isString() && 0 < newData.length && newData.length <= 20"
+              },
+              "points": {
+                ".validate": "newData.isNumber()"
+              },
+              "state": {
+                ".validate": "newData.isString() && (newData === 'pending' || newData === 'playing' || newData === 'ready')"
+              }
+            }
+          },
+          "state": {
+            ".validate": "newData.isString() && (newData === 'playing' || newData === 'waiting')"
           }
         }
       }
