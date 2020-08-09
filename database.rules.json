@@ -6,18 +6,21 @@
     "$stage": {
       "rooms": {
         "$roomId": {
+          ".read": "data.child('users').child(auth.uid).exists()",
           "currentRound": {
-
-          },
-          "users": {
-            "$userId": {
-
+            "code": {
+              ".write": "auth.uid === data.parent().child('writer').val()"
+            },
+            "language": {
+              ".write": "auth.uid === data.parent().child('writer').val()"
             }
-          },
-          "state": {
-
           }
         }
+      }
+    },
+    "secrets": {
+      "$userId": {
+        ".read": "$userId === auth.uid"
       }
     }
   }
