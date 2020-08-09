@@ -7,7 +7,7 @@
 なお、`stage`が、上記のいずれでもなかった場合は
 
 - status: `400`
-- message: `Invalid stage`
+- message: `Invalid Stage`
 
 を返却する。
 
@@ -155,3 +155,21 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |`secret`が誤っている|401|Invalid Secret||
 |`answer`が不正|400|Invalid Answer||
 |自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
+
+## `POST /api/{stage}/report`
+
+レポートを投稿する。
+
+### リクエスト
+
+```json
+{
+  "content": "{reportContent}"
+}
+```
+
+### レスポンス
+
+#### 成功
+
+- status: `201`
