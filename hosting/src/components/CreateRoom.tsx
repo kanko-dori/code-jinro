@@ -29,7 +29,7 @@ const CreateRoom: React.FC = () => {
   };
 
   return (
-    <Card>
+    <Card className={classes.container}>
       <CardContent>
         <Typography variant="h4">ゲーム開始</Typography>
         <div className={classes.flex}>
