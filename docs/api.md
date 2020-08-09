@@ -19,6 +19,10 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ### レスポンス
 
+#### 成功
+
+- status: `201`
+
 ```json
 {
   "id": "{roomId}"
@@ -49,7 +53,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 #### 成功
 
-- status: `200`
+- status: `201`
 
 ```json
 {}
@@ -111,11 +115,43 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 `writer`でないユーザーが回答する。
 
+`writer`以外の全員が`pending`になるか正答が出たとき以下を設定。
+
+- `currentRound.winner`を回答者に設定
+- 回答者にポイントを付与
+- `UserState`が`pending`のユーザー数×倍率のポイントを`writer`に付与
+- 全員の`UserState`を`pending`に設定
+
+回答に成功したとき、正答、誤答に関わらず`UserState`を`pending`にする。
+
 ### リクエスト
 
 ```json
 {
   "uid": "{userId}",
-  "answer": "{answerUser}"
+  "secret": "{userSecret}",
+  "answer": "{answerUserId}"
 }
 ```
+
+### レスポンス
+
+#### 成功
+
+- status: `200`
+
+```json
+{
+  "correct": "{isCorrectAnswer: bool}"
+}
+```
+
+#### エラー
+
+|type|code|message|備考|
+|---|---|---|---|
+|`:roomId`が存在しない|404|Room Not Found||
+|`uid`が存在しない|401|Unauthenticated User||
+|`secret`が誤っている|401|Invalid Secret||
+|`answer`が不正|400|Invalid Answer||
+|自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
