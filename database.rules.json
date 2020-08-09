@@ -2,6 +2,23 @@
   "rules": {
     /* default */
     ".read": false,
-    ".write": false
+    ".write": false,
+    "$stage": {
+      "rooms": {
+        "$roomId": {
+          "currentRound": {
+
+          },
+          "users": {
+            "$userId": {
+
+            }
+          },
+          "state": {
+
+          }
+        }
+      }
+    }
   }
 }
