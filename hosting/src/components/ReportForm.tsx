@@ -8,20 +8,19 @@ import {
   CardContent,
   CardActions,
 } from '@material-ui/core';
+import Spacer from './Spacer';
+import classes from './ReportForm.module.css';
 
 const ReportForm: React.FC = () => (
-  <Card>
+  <Card className={classes.container}>
     <form>
       <CardContent>
         <Typography variant="h5">バグ報告</Typography>
-        <TextField label="Message" variant="outlined" multiline />
+        <TextField label="Message" variant="outlined" multiline fullWidth rows={3} />
       </CardContent>
       <CardActions>
-        <Button
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
+        <Spacer />
+        <Button color="inherit" type="submit">
           Send
         </Button>
       </CardActions>
