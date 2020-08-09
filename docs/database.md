@@ -1,13 +1,17 @@
 # データベース
 
-データベースには[Firebase Realtime Database](https://firebase.google.com/docs/database?hl=ja)を採用
+メインのデータベースには[Firebase Realtime Database](https://firebase.google.com/docs/database?hl=ja)を採用
 （Firestoreを用いない理由としてはコードの更新が頻繁に行われドキュメント書き込み2万件/日の制限に容易に到達するため）。
+
+サブのデータベースには[Cloud Firestore](https://firebase.google.com/docs/firestore?hl=ja)を採用。こちらはIssueなどレポートを保管する。
 
 Realtime Databaseはドキュメント指向なNoSQLのデータベースでありJSONデータとして保存される。
 
 ## スキーマ
 
 実装は[`types.ts`](../hosting/src/types/types.ts)を参考のこと。
+
+特に明記しない限りRealtime Databaseを用いる。
 
 ### `/{stage}/rooms/{roomId}`: `Room`
 
@@ -61,4 +65,17 @@ type UserState = 'pending' | 'ready' | 'playing';
 
 ```typescript
 type RoomState = 'playing' | 'waiting'
+```
+
+### `/reports/{reportId}`: `Report`
+
+**このレコードはFirestoreに保存する**
+
+- `reportId`ではFirestoreから自動で割り当てられたユニークなIDを利用する。
+
+```typescript
+type Report = {
+  createdAt: Date
+  content: string // non empty
+}
 ```
