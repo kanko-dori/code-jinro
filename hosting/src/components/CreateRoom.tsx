@@ -13,7 +13,7 @@ const CreateRoom: React.FC = () => {
 
   const handleClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    fetch(`https://us-central1-code-jinro.cloudfunctions.net/api/room/${process.env.NODE_ENV}`, { method: 'PUT' })
+    fetch(`/api/${process.env.NODE_ENV}/room`, { method: 'POST' })
       .then((response) => response.json())
       .then((data: response) => {
         console.log(data);
