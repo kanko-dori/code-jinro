@@ -1,7 +1,6 @@
 import React from 'react';
 
-import {
-} from '@material-ui/core';
+import { Snackbar } from '@material-ui/core';
 import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
@@ -28,6 +27,7 @@ interface State {
   id: string
   user?: firebase.User
   loginAlert: boolean
+  watchingMode: boolean
 }
 
 const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/room`;
@@ -38,6 +38,7 @@ class RoomComponent extends React.Component<Props, State> {
     this.state = {
       id: props.match.params.id,
       loginAlert: false,
+      watchingMode: false,
     };
 
     this.onLangChange = this.onLangChange.bind(this);
@@ -178,6 +179,11 @@ class RoomComponent extends React.Component<Props, State> {
         >
           ログインできませんでした。もう一度試してください。
         </Notification>
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.watchingMode}
+          message="観戦モードで参加しています"
+        />
       </div>
     );
   }
