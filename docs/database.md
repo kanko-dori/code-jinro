@@ -13,6 +13,10 @@ Realtime Databaseはドキュメント指向なNoSQLのデータベースであ�
 
 特に明記しない限りRealtime Databaseを用いる。
 
+### `/secrets/{userId}`: `string`
+
+ここで定義されるシークレット値は、APIを利用する際にユーザーを識別・認証に用いる。
+
 ### `/{stage}/rooms/{roomId}`: `Room`
 
 - `stage`には`production`/`staging`/`dev`をとり、ステージを分割する。
@@ -53,8 +57,7 @@ type RoomUsers = {
 type User = {
   name: string, // 0 < length <= 20
   points: number,
-  state: UserState,
-  secret: string
+  state: UserState
 };
 type UserID = string; // firebase.User.uid
 type UserState = 'pending' | 'ready' | 'playing';
