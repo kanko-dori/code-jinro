@@ -173,9 +173,10 @@ class RoomComponent extends React.Component<Props, State> {
         </section>
         <Notification
           open={this.state.loginAlert}
-          onClose={() => this.setState({ loginAlert: false })}
+          onClose={() => this.setState({ loginAlert: false, watchingMode: true })}
           severnity="error"
           variant="filled"
+          autoHideDuration={3000}
         >
           ログインできませんでした。もう一度試してください。
         </Notification>
