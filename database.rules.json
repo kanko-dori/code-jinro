@@ -26,7 +26,7 @@
                 ".validate": "newData.isNumber()"
               },
               "state": {
-                ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'playing' || newData.val() === 'ready')"
+                ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'playing' || newData.val() == 'ready')"
               }
             }
           },
