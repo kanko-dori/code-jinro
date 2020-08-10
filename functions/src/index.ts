@@ -3,7 +3,7 @@ import * as firebase from 'firebase-admin';
 
 import * as express from 'express';
 import * as cors from 'cors';
-import * as handler from './handler'
+import * as handler from './handler';
 
 const app = express();
 app.use(cors({}));
