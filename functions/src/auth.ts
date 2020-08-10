@@ -1,7 +1,6 @@
-import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import { UserRecord } from 'firebase-functions/lib/providers/auth';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 const generateRandomString = (len: number = 32) => crypto.randomBytes(len).toString('base64').substring(0, len);
 
