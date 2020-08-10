@@ -20,18 +20,18 @@
           "users": {
             "$userId": {
               "name": {
-                ".validate": "newData.isString() && 0 < newData.length && newData.length <= 20"
+                ".validate": "newData.isString() && 0 < newData.val().length && newData.val().length <= 20"
               },
               "points": {
                 ".validate": "newData.isNumber()"
               },
               "state": {
-                ".validate": "newData.isString() && (newData === 'pending' || newData === 'playing' || newData === 'ready')"
+                ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'playing' || newData.val() === 'ready')"
               }
             }
           },
           "state": {
-            ".validate": "newData.isString() && (newData === 'playing' || newData === 'waiting')"
+            ".validate": "newData.isString() && (newData.val() == 'playing' || newData.val() == 'waiting')"
           }
         }
       }
