@@ -11,7 +11,7 @@ export const ping = (request: functions.Request, response: functions.Response): 
 
 export const createNewRoom = (request: functions.Request, response: functions.Response):void => {
   const { stage } = request.params;
-  if (!['production', 'staging', 'development'].includes(stage)) {
+  if (!['production', 'staging', 'dev'].includes(stage)) {
     response.status(400).send('Stage is required');
     return;
   }
