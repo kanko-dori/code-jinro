@@ -4,12 +4,12 @@ import * as firebase from 'firebase-admin';
 import { Room, RoundState } from './types/types';
 import { languages } from './utils/constants';
 
-export const ping = (request: functions.Request, response: functions.Response) => {
+export const ping = (request: functions.Request, response: functions.Response): void => {
   functions.logger.info('ping');
   response.sendStatus(200);
 };
 
-export const createNewRoom = (request: functions.Request, response: functions.Response) => {
+export const createNewRoom = (request: functions.Request, response: functions.Response):void => {
   const { stage } = request.params;
   if (!['production', 'staging', 'development'].includes(stage)) {
     response.status(400).send('Stage is required');
