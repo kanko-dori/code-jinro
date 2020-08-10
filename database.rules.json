@@ -26,12 +26,12 @@
                 ".validate": "newData.isNumber()"
               },
               "state": {
-                ".validate": "newData.isString() && (newData.val() == 'pending' || newData.val() == 'playing' || newData.val() == 'ready')"
+                ".validate": "newData.isString() && (newData.val() === 'pending' || newData.val() === 'playing' || newData.val() === 'ready')"
               }
             }
           },
           "state": {
-            ".validate": "newData.isString() && (newData.val() == 'playing' || newData.val() == 'waiting')"
+            ".validate": "newData.isString() && (newData.val() === 'playing' || newData.val() === 'waiting')"
           }
         }
       }
