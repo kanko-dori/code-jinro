@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 
 import { realtimeDB, auth } from '../utils/firebase';
-import { Room, RoundState, Language } from '../types/types';
+import { Room, Language } from '../types/types';
 import { languages } from '../utils/constants';
 
 import classes from './Room.module.css';
@@ -30,7 +30,7 @@ interface State {
   watchingMode: boolean
 }
 
-const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/room`;
+const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/rooms`;
 
 class RoomComponent extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -80,54 +80,16 @@ class RoomComponent extends React.Component<Props, State> {
       this.setState({ loginAlert: true });
     });
 
+    // TODO: POST /api/:stage/:roomId/enter
     const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
     console.log(docRef);
     docRef.once('value').then((doc) => {
       console.log({ doc });
       if (doc.exists()) { // exist room
         const room = doc.val() as Room;
-        const selfUserIndex = room.users.findIndex((user) => user.id === this.state.user?.uid);
-        console.log({ selfUserIndex });
-
-        if (selfUserIndex === -1) {
-          console.log('new user: ', name);
-          room.users.push({ name, point: 0, id: this.state.user?.uid ?? '' });
-          docRef.set(room)
-            .then(() => console.log('Document successfully written', room))
-            .catch((err) => console.error('Writing docuemnt failed.: ', err));
-        } else if (room.users[selfUserIndex].name === name) {
-          console.log('duplicate uid. skipping update firestore');
-        } else {
-          console.log('update to use new name');
-          room.users[selfUserIndex].name = name;
-          docRef.set(room)
-            .then(() => console.log('Document successfully written', room))
-            .catch((err) => console.error('Writing docuemnt failed.: ', err));
-        }
-
         this.setState({ room });
       } else { // not exist room
-        this.setState((prevState) => {
-          const room :Room = {
-            currentRound: {
-              language: languages[0],
-              problemURL: '',
-              code: '',
-            },
-            users: [{
-              name,
-              point: 0,
-              id: prevState.user?.uid ?? '',
-            }],
-            currentState: RoundState.問題提示,
-            history: [],
-          };
-          console.log({ room });
-          docRef.set(room)
-            .then(() => console.log('Document successfully written', room))
-            .catch((err) => console.error('Writing docuemnt failed.: ', err));
-          return { room };
-        });
+        // TODO: error
       }
     });
   }
@@ -169,7 +131,7 @@ class RoomComponent extends React.Component<Props, State> {
           <Users users={this.state.room?.users} />
         </section>
         <section className={classes.stats}>
-          <Stats onReady={() => { console.log('Ready'); }} />
+          <Stats onReady={() => { /* TODO: PUT /api/:stage/:roomId/ready */console.log('Ready'); }} />
         </section>
         <Notification
           open={this.state.loginAlert}

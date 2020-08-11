@@ -8,7 +8,7 @@ import {
   FormControlLabel,
   Button,
 } from '@material-ui/core';
-import { Users, User } from '../types/types';
+import { Users } from '../types/types';
 
 import classes from './Users.module.css';
 
