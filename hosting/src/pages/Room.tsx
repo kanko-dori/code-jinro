@@ -76,7 +76,6 @@ class RoomComponent extends React.Component<Props, State> {
     });
   }
 
-  // eslint-disable-next-line
   async onNameInput(name: string):Promise<void> {
     return new Promise((resolve, reject) => {
       this.login().then((user) => realtimeDB.ref(`secrets/${user.uid}`).once('value')).then((doc) => {
@@ -114,8 +113,7 @@ class RoomComponent extends React.Component<Props, State> {
       auth.signInAnonymously().catch((err) => console.error('Signin Anonymously failed: ', err));
       auth.onAuthStateChanged((user) => {
         if (user) {
-          console.log(user);
-          // eslint-disable-next-line react/no-unused-state
+          console.log({ user });
           this.setState({ user });
           resolve(user);
         } else {
