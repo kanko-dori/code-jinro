@@ -34,6 +34,19 @@ interface State {
 const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/rooms`;
 
 class RoomComponent extends React.Component<Props, State> {
+  static login():Promise<firebase.User> {
+    return new Promise((resolve, reject) => {
+      auth.signInAnonymously().catch((err) => console.error('Signin Anonymously failed: ', err));
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          resolve(user);
+        } else {
+          reject(new Error('unexpected error'));
+        }
+      });
+    });
+  }
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -78,7 +91,10 @@ class RoomComponent extends React.Component<Props, State> {
 
   async onNameInput(name: string):Promise<void> {
     return new Promise((resolve, reject) => {
-      this.login().then((user) => realtimeDB.ref(`secrets/${user.uid}`).once('value')).then((doc) => {
+      RoomComponent.login().then((user) => {
+        this.setState({ user });
+        return realtimeDB.ref(`secrets/${user.uid}`).once('value');
+      }).then((doc) => {
         if (!doc.exists()) throw new Error('Secret not found.');
         const secret = doc.val() as string;
         this.setState({ secret });
@@ -100,26 +116,12 @@ class RoomComponent extends React.Component<Props, State> {
           const room = doc.val() as Room;
           console.log({ room });
           this.setState({ room });
+          resolve();
         })
         .catch((err) => {
           this.setState({ loginAlert: true });
           reject(err);
         });
-    });
-  }
-
-  login():Promise<firebase.User> {
-    return new Promise((resolve, reject) => {
-      auth.signInAnonymously().catch((err) => console.error('Signin Anonymously failed: ', err));
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          console.log({ user });
-          this.setState({ user });
-          resolve(user);
-        } else {
-          reject(new Error('unexpected error'));
-        }
-      });
     });
   }
 
