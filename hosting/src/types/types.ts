@@ -2,8 +2,8 @@ import { languages } from '../utils/constants';
 
 export type Room = {
   currentRound: Round,
-  users: User[],
-  currentState: RoundState,
+  users: Users,
+  state: RoomState,
   history: Round[]
 }
 
@@ -11,20 +11,22 @@ export type Round = {
   problemURL: string
   code: string
   language: Language
-  writer?: User
-  winner?: User
+  writer?: UserID
+  winner?: UserID
 }
+
+export type UserID = string;
+
+export type Users = { [id: string]: User }
 
 export type User = {
   name: string
-  id: string
   point: number
+  state: UserState
 }
 
-export enum RoundState {
-  問題提示,
-  回答中,
-  正解
-}
+export type RoomState = 'playing' | 'waiting';
+
+export type UserState = 'pending' | 'ready' | 'playing';
 
 export type Language = typeof languages[number];
