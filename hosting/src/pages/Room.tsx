@@ -61,7 +61,7 @@ class RoomComponent extends React.Component<Props, State> {
     this.onReady = this.onReady.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
-    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.roomId}`);
     docRef.on('value', (doc) => {
       const data = doc.val() as Room;
       console.log('value: ', data);
@@ -73,7 +73,7 @@ class RoomComponent extends React.Component<Props, State> {
     console.log({ language });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`${ROOMS_PATH}/${prevState.id}/currentRound`).update({ language });
+      realtimeDB.ref(`${ROOMS_PATH}/${prevState.roomId}/currentRound`).update({ language });
       const { room } = prevState;
       room.currentRound.language = language;
       return { room };
@@ -131,7 +131,7 @@ class RoomComponent extends React.Component<Props, State> {
         })
         .then((res) => {
           if (!res.ok) throw new Error(res.statusText);
-          return realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`).once('value');
+          return realtimeDB.ref(`${ROOMS_PATH}/${this.state.roomId}`).once('value');
         })
         .then((doc) => {
           if (!doc.exists()) throw new Error('Room not found');
