@@ -75,6 +75,7 @@ class RoomComponent extends React.Component<Props, State> {
     });
   }
 
+  // eslint-disable-next-line
   async onNameInput(name: string):Promise<void> {
     await this.login().catch(() => {
       this.setState({ loginAlert: true });
@@ -100,6 +101,7 @@ class RoomComponent extends React.Component<Props, State> {
       auth.onAuthStateChanged((user) => {
         if (user) {
           console.log(user);
+          // eslint-disable-next-line react/no-unused-state
           this.setState({ user });
           resolve(user);
         } else {
