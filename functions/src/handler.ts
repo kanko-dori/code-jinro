@@ -1,8 +1,21 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
+import { NextFunction } from 'express';
 
 import { Room } from './types/types';
-import { languages } from './utils/constants';
+import { languages, stages } from './utils/constants';
+
+export const stageChecker = (
+  req: functions.Request,
+  res: functions.Response,
+  next: NextFunction,
+): void => {
+  if (!(stages as readonly string[]).includes(req.params.stage)) {
+    res.status(400).send('Invalid Stage');
+  } else {
+    next();
+  }
+};
 
 export const ping = (request: functions.Request, response: functions.Response): void => {
   functions.logger.info('ping');
