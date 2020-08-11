@@ -10,30 +10,32 @@ export const ping = (request: functions.Request, response: functions.Response): 
 };
 
 export const createNewRoom = (request: functions.Request, response: functions.Response):void => {
-  const { stage } = request.params;
-  if (!['production', 'staging', 'development'].includes(stage)) {
-    response.status(400).send('Stage is required');
-    return;
-  }
+  try {
+    const { stage } = request.params;
+    if (!['production', 'staging', 'development'].includes(stage)) {
+      response.status(400).send('Invalid Stage');
+      return;
+    }
 
-  const realtimeDB = firebase.database();
-  const roomsRef = realtimeDB.ref(`${stage}/room`);
-  const newRoomRef = roomsRef.push();
-  const newRoom :Room = {
-    currentRound: {
-      language: languages[0],
-      problemURL: '',
-      code: '',
-    },
-    users: [],
-    currentState: RoundState.問題提示,
-    history: [],
-  };
+    const realtimeDB = firebase.database();
+    const roomsRef = realtimeDB.ref(`${stage}/rooms`);
+    const newRoomRef = roomsRef.push();
+    const newRoom :Room = {
+      currentRound: {
+        language: languages[0],
+        problemURL: '',
+        code: '',
+      },
+      users: [],
+      currentState: RoundState.問題提示,
+      history: [],
+    };
 
-  newRoomRef.set(newRoom).then((room) => {
-    console.log(room);
-    response.send({ room: newRoom, id: newRoomRef.key });
-  }).catch((err) => {
+    newRoomRef.set(newRoom).then((room) => {
+      console.log(room);
+      response.status(201).send({ id: newRoomRef.key });
+    });
+  } catch (err) {
     response.sendStatus(500).send(err);
-  });
+  }
 };
