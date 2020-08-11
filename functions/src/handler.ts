@@ -1,15 +1,11 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
-import { NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import { Room } from './types/types';
 import { languages, stages } from './utils/constants';
 
-export const stageChecker = (
-  req: functions.Request,
-  res: functions.Response,
-  next: NextFunction,
-): void => {
+export const stageChecker = (req: Request, res: Response, next: NextFunction): void => {
   if (!(stages as readonly string[]).includes(req.params.stage)) {
     res.status(400).send('Invalid Stage');
   } else {
@@ -17,18 +13,14 @@ export const stageChecker = (
   }
 };
 
-export const ping = (request: functions.Request, response: functions.Response): void => {
+export const ping = (request: Request, response: Response): void => {
   functions.logger.info('ping');
   response.sendStatus(200);
 };
 
-export const createNewRoom = (request: functions.Request, response: functions.Response):void => {
+export const createNewRoom = (request: Request, response: Response, next: NextFunction) :void => {
   try {
     const { stage } = request.params;
-    if (!['production', 'staging', 'development'].includes(stage)) {
-      response.status(400).send('Invalid Stage');
-      return;
-    }
 
     const realtimeDB = firebase.database();
     const roomsRef = realtimeDB.ref(`${stage}/rooms`);
@@ -49,6 +41,6 @@ export const createNewRoom = (request: functions.Request, response: functions.Re
       response.status(201).send({ id: newRoomRef.key });
     });
   } catch (err) {
-    response.sendStatus(500).send(err);
+    next(err);
   }
 };
