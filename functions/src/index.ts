@@ -9,7 +9,7 @@ import * as onAuth from './auth';
 const app = express();
 app.use(cors({}));
 app.use(express.json());
-app.use(handler.stageChecker);
+app.use('/:stage', handler.stageChecker);
 firebase.initializeApp();
 
 app.get('/', handler.ping);
