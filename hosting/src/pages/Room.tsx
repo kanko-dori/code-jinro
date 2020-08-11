@@ -99,12 +99,14 @@ class RoomComponent extends React.Component<Props, State> {
         uid: this.state.user?.uid,
         secret: this.state.secret,
       }),
-    }).then((res) => {
-      if (res.ok) return;
-      throw new Error(res.statusText);
-    }).catch((err) => {
-      console.error(err);
-    });
+    })
+      .then((res) => {
+        if (res.ok) return;
+        throw new Error(res.statusText);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   onNameInput(name: string):Promise<void> {
@@ -112,23 +114,25 @@ class RoomComponent extends React.Component<Props, State> {
       RoomComponent.login().then((user) => {
         this.setState({ user });
         return realtimeDB.ref(`secrets/${user.uid}`).once('value');
-      }).then((doc) => {
-        if (!doc.exists()) throw new Error('Secret not found.');
-        const secret = doc.val() as string;
-        this.setState({ secret });
-        return fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/enter`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            uid: this.state.user?.uid,
-            name,
-            secret,
-          }),
-        });
-      }).then((res) => {
-        if (!res.ok) throw new Error(res.statusText);
-        return realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`).once('value');
       })
+        .then((doc) => {
+          if (!doc.exists()) throw new Error('Secret not found.');
+          const secret = doc.val() as string;
+          this.setState({ secret });
+          return fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/enter`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              uid: this.state.user?.uid,
+              name,
+              secret,
+            }),
+          });
+        })
+        .then((res) => {
+          if (!res.ok) throw new Error(res.statusText);
+          return realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`).once('value');
+        })
         .then((doc) => {
           if (!doc.exists()) throw new Error('Room not found');
           const room = doc.val() as Room;
