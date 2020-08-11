@@ -8,18 +8,18 @@ import {
   FormControlLabel,
   Button,
 } from '@material-ui/core';
-import { User } from '../types/types';
+import { Users, User } from '../types/types';
 
 import classes from './Users.module.css';
 
 interface Props {
-  users?: User[];
+  users?: Users;
 }
 interface State {
   voteUserId: string;
 }
 
-class Users extends React.Component<Props, State> {
+class UsersComponent extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -30,15 +30,14 @@ class Users extends React.Component<Props, State> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string):void {
     this.setState({ voteUserId: value });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
     event.preventDefault();
-    console.log('Vote:', this.props.users?.find((user) => user.id === this.state.voteUserId)?.name);
+    const votedUser = this.props.users && this.props.users[this.state.voteUserId];
+    console.log({ votedUser });
   }
 
   render(): JSX.Element {
@@ -49,10 +48,10 @@ class Users extends React.Component<Props, State> {
             <FormLabel component="legend">Vote writing user</FormLabel>
             <RadioGroup value={this.state.voteUserId} onChange={this.onRadioChange}>
               {
-                (this.props.users ?? []).map((user) => (
+                Object.entries(this.props.users ?? {}).map(([userId, user]) => (
                   <FormControlLabel
-                    key={user.name + user.id}
-                    value={user.id}
+                    key={user.name + userId}
+                    value={userId}
                     control={<Radio />}
                     label={user.name}
                   />
@@ -68,4 +67,4 @@ class Users extends React.Component<Props, State> {
     );
   }
 }
-export default Users;
+export default UsersComponent;
