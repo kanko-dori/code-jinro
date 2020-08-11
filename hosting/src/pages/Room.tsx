@@ -24,7 +24,7 @@ interface Props {
 }
 interface State {
   room?: Room
-  id: string
+  roomId: string
   user?: firebase.User
   loginAlert: boolean
   watchingMode: boolean
@@ -32,6 +32,7 @@ interface State {
 }
 
 const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/rooms`;
+const STAGED_ENDPOINT = `/api/${process.env.REACT_APP_STAGE}`;
 
 class RoomComponent extends React.Component<Props, State> {
   static login():Promise<firebase.User> {
@@ -50,13 +51,14 @@ class RoomComponent extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      id: props.match.params.id,
+      roomId: props.match.params.id,
       loginAlert: false,
       watchingMode: false,
     };
 
     this.onLangChange = this.onLangChange.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
+    this.onReady = this.onReady.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
     const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
@@ -82,14 +84,30 @@ class RoomComponent extends React.Component<Props, State> {
     console.log({ code });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`${ROOMS_PATH}/${prevState.id}/currentRound`).update({ code });
+      realtimeDB.ref(`${ROOMS_PATH}/${prevState.roomId}/currentRound`).update({ code });
       const { room } = prevState;
       room.currentRound.code = code;
       return { room };
     });
   }
 
-  async onNameInput(name: string):Promise<void> {
+  onReady(): void {
+    fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/ready`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        uid: this.state.user?.uid,
+        secret: this.state.secret,
+      }),
+    }).then((res) => {
+      if (res.ok) return;
+      throw new Error(res.statusText);
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
+  onNameInput(name: string):Promise<void> {
     return new Promise((resolve, reject) => {
       RoomComponent.login().then((user) => {
         this.setState({ user });
@@ -98,7 +116,7 @@ class RoomComponent extends React.Component<Props, State> {
         if (!doc.exists()) throw new Error('Secret not found.');
         const secret = doc.val() as string;
         this.setState({ secret });
-        return fetch(`/api/${process.env.REACT_APP_STAGE}/${this.state.id}/enter`, {
+        return fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/enter`, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
@@ -147,7 +165,7 @@ class RoomComponent extends React.Component<Props, State> {
           <Users users={this.state.room?.users} />
         </section>
         <section className={classes.stats}>
-          <Stats onReady={() => { /* TODO: PUT /api/:stage/:roomId/ready */console.log('Ready'); }} />
+          <Stats onReady={this.onReady} />
         </section>
         <Notification
           open={this.state.loginAlert}
