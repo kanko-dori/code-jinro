@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 
-import { Room, RoundState } from './types/types';
+import { Room } from './types/types';
 import { languages } from './utils/constants';
 
 export const ping = (request: functions.Request, response: functions.Response): void => {
@@ -26,8 +26,8 @@ export const createNewRoom = (request: functions.Request, response: functions.Re
         problemURL: '',
         code: '',
       },
-      users: [],
-      currentState: RoundState.問題提示,
+      users: {},
+      state: 'waiting',
       history: [],
     };
 
