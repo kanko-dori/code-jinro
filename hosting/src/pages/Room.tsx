@@ -28,6 +28,7 @@ interface State {
   user?: firebase.User
   loginAlert: boolean
   watchingMode: boolean
+  secret?: string
 }
 
 const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/rooms`;
@@ -77,21 +78,34 @@ class RoomComponent extends React.Component<Props, State> {
 
   // eslint-disable-next-line
   async onNameInput(name: string):Promise<void> {
-    await this.login().catch(() => {
-      this.setState({ loginAlert: true });
-    });
-
-    // TODO: POST /api/:stage/:roomId/enter
-    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
-    console.log(docRef);
-    docRef.once('value').then((doc) => {
-      console.log({ doc });
-      if (doc.exists()) { // exist room
-        const room = doc.val() as Room;
-        this.setState({ room });
-      } else { // not exist room
-        // TODO: error
-      }
+    return new Promise((resolve, reject) => {
+      this.login().then((user) => realtimeDB.ref(`secrets/${user.uid}`).once('value')).then((doc) => {
+        if (!doc.exists()) throw new Error('Secret not found.');
+        const secret = doc.val() as string;
+        this.setState({ secret });
+        return fetch(`/api/${process.env.REACT_APP_STAGE}/${this.state.id}/enter`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            uid: this.state.user?.uid,
+            name,
+            secret,
+          }),
+        });
+      }).then((res) => {
+        if (!res.ok) throw new Error(res.statusText);
+        return realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`).once('value');
+      })
+        .then((doc) => {
+          if (!doc.exists()) throw new Error('Room not found');
+          const room = doc.val() as Room;
+          console.log({ room });
+          this.setState({ room });
+        })
+        .catch((err) => {
+          this.setState({ loginAlert: true });
+          reject(err);
+        });
     });
   }
 
