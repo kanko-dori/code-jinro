@@ -19,7 +19,7 @@ Realtime Databaseはドキュメント指向なNoSQLのデータベースであ�
 
 ### `/{stage}/rooms/{roomId}`: `Room`
 
-- `stage`には`production`/`staging`/`dev`をとり、ステージを分割する。
+- `stage`には`production`/`staging`/`development`をとり、ステージを分割する。
 - `roomId`ではRealtime Databaseから自動で割り当てられたユニークなIDを利用する。
 
 ```typescript
