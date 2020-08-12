@@ -4,7 +4,7 @@ import { Snackbar } from '@material-ui/core';
 import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
-import UserList from '../components/Users';
+import UserList from '../components/UserList';
 import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 

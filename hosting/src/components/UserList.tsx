@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import React from 'react';
 import {
   Radio,
@@ -10,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { Users } from '../types/types';
 
-import classes from './Users.module.css';
+import classes from './UserList.module.css';
 
 interface Props {
   users?: Users;
