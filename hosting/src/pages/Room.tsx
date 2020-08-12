@@ -9,7 +9,7 @@ import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 
 import { realtimeDB, auth } from '../utils/firebase';
-import { Room, Language } from '../types/types';
+import { Room, Language, UserID } from '../types/types';
 import { languages } from '../utils/constants';
 
 import classes from './Room.module.css';
@@ -58,6 +58,7 @@ class RoomComponent extends React.Component<Props, State> {
 
     this.onLangChange = this.onLangChange.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
+    this.onVoteUser = this.onVoteUser.bind(this);
     this.onReady = this.onReady.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
@@ -88,6 +89,29 @@ class RoomComponent extends React.Component<Props, State> {
       const { room } = prevState;
       room.currentRound.code = code;
       return { room };
+    });
+  }
+
+  onVoteUser(voteUserId: UserID): void {
+    fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/answer`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json'},
+      body: JSON.stringify({
+        uid: this.state.user?.uid,
+        secret: this.state.secret,
+        answer: voteUserId
+      })
+    }).then((res) => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res.json();
+    }).then(({ correct }) => {
+      if (correct) {
+        console.log('Correct!');
+      } else {
+        console.log('Incorrect');
+      }
+    }).catch((err) => {
+      console.error(err);
     });
   }
 
@@ -166,7 +190,11 @@ class RoomComponent extends React.Component<Props, State> {
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
         </section>
         <section className={classes.users}>
-          <UserList users={this.state.room?.users} selfId={this.state.user?.uid} />
+          <UserList
+            users={this.state.room?.users}
+            selfId={this.state.user?.uid}
+            onVote={this.onVoteUser}
+          />
         </section>
         <section className={classes.stats}>
           <Stats onReady={this.onReady} />

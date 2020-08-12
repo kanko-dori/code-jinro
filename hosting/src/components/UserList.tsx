@@ -14,6 +14,7 @@ import classes from './UserList.module.css';
 interface Props {
   selfId?: UserID;
   users?: Users;
+  onVote: (voteUserId: string) => void;
 }
 interface State {
   voteUserId: string;
@@ -38,6 +39,7 @@ class UserList extends React.Component<Props, State> {
   onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
     event.preventDefault();
     const votedUser = this.props.users && this.props.users[this.state.voteUserId];
+    this.props.onVote(this.state.voteUserId);
     console.log({ votedUser });
   }
 
