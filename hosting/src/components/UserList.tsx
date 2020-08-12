@@ -30,8 +30,9 @@ class UserList extends React.Component<Props, State> {
     };
   }
 
-  onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string):void {
-    this.setState({ voteUserId: value });
+  onRadioChange(event: React.ChangeEvent<HTMLInputElement>, voteUserId: string):void {
+    if (voteUserId === this.props.selfId) return;
+    this.setState({ voteUserId });
   }
 
   onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
