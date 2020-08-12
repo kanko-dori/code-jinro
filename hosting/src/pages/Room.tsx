@@ -95,12 +95,12 @@ class RoomComponent extends React.Component<Props, State> {
   onVoteUser(voteUserId: UserID): void {
     fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/answer`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json'},
+      headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         uid: this.state.user?.uid,
         secret: this.state.secret,
-        answer: voteUserId
-      })
+        answer: voteUserId,
+      }),
     }).then((res) => {
       if (!res.ok) throw new Error(res.statusText);
       return res.json();
