@@ -19,7 +19,7 @@ interface State {
   voteUserId: string;
 }
 
-class UsersComponent extends React.Component<Props, State> {
+class UserList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -67,4 +67,4 @@ class UsersComponent extends React.Component<Props, State> {
     );
   }
 }
-export default UsersComponent;
+export default UserList;

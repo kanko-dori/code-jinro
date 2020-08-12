@@ -4,7 +4,7 @@ import { Snackbar } from '@material-ui/core';
 import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
-import Users from '../components/Users';
+import UserList from '../components/Users';
 import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 
@@ -166,7 +166,7 @@ class RoomComponent extends React.Component<Props, State> {
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
         </section>
         <section className={classes.users}>
-          <Users users={this.state.room?.users} />
+          <UserList users={this.state.room?.users} />
         </section>
         <section className={classes.stats}>
           <Stats onReady={this.onReady} />
