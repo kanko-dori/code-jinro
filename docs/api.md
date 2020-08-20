@@ -105,8 +105,8 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
-|`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
-|すでにReady済み|400|Already Ready|`UserState`が`pending`のときのみreadyできる|
+|`RoomState`が`playing`|`failed-precondition`|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
+|すでにReady済み|`failed-precondition`|Already Ready|`UserState`が`pending`のときのみreadyできる|
 
 ## onCall `answer`
 
