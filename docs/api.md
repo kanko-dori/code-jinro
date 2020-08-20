@@ -2,20 +2,19 @@
 
 バックエンドは[Cloud Functions for Firebase](https://firebase.google.com/docs/functions?hl=ja)を用いる。
 
-各APIのエンドポイントは`/api/:stage/`というURLから始まる。`stage`は`prodction`/`staging`/`development`が入り、ステージを分岐する。
-
-なお、`stage`が、上記のいずれでもなかった場合は
-
-- code: `invalid-argument`
-- message: `Invalid Stage`
-
-を返却する。
-
 ## onCall `room`
 
 ルーム作成し、ルームIDを返す。
 
 IDは`Realtime Database`で自動生成されるものを用いる。
+
+### リクエスト
+
+```json
+{
+  "stage": "{stage}"
+}
+```
 
 ### レスポンス
 
@@ -28,6 +27,12 @@ IDは`Realtime Database`で自動生成されるものを用いる。
   "roomId": "{roomId}"
 }
 ```
+
+#### エラー
+
+|type|code|message|備考|
+|---|---|---|---|
+|`stage`が不正|`invalid-arguments`|Invalid Stage||
 
 ## onCall `enter`
 
@@ -44,6 +49,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
+  "stage": "{stage}",
   "roomId": "{roomId}",
   "name": "{userName}"
 }
@@ -63,6 +69,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
+|`stage`が不正|`invalid-arguments`|Invalid Stage||
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |`name`が不正|`out-of-range`|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
 |`name`が重複|`already-exists`|Conflict Name|`name`はルーム内で一意である必要が有る|
@@ -85,6 +92,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
+  "stage": "{stage}",
   "roomId": "{roomId}",
 }
 ```
@@ -103,6 +111,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
+|`stage`が不正|`invalid-arguments`|Invalid Stage||
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
 |`RoomState`が`playing`|`failed-precondition`|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
@@ -125,6 +134,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
+  "stage": "{stage}",
   "roomId": "{roomId}",
   "answer": "{answerUserId}"
 }
@@ -146,6 +156,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
+|`stage`が不正|`invalid-arguments`|Invalid Stage||
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
 |`answer`が不正|`invalid-argument`|Invalid Answer||
