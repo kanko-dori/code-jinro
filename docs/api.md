@@ -6,7 +6,7 @@
 
 なお、`stage`が、上記のいずれでもなかった場合は
 
-- status: `400`
+- code: `invalid-argument`
 - message: `Invalid Stage`
 
 を返却する。
