@@ -16,7 +16,7 @@ const ReportForm: React.FC = () => {
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormText(e.target.value);
-  }
+  };
 
   const sendReport = () => {
     console.log(formText);
@@ -27,25 +27,25 @@ const ReportForm: React.FC = () => {
         content: formText,
       }),
     }).then((res) => {
-      if(res.ok) return;
+      if (res.ok) return;
       throw new Error(res.statusText);
     }).catch((err) => {
       console.error(err);
     });
-  }
+  };
 
   return (
     <Card className={classes.container}>
       <form>
         <CardContent>
           <Typography variant="h5">バグ報告</Typography>
-          <TextField label="Message" variant="outlined" multiline fullWidth rows={3} onChange={e => handleFormChange(e)} />
+          <TextField label="Message" variant="outlined" multiline fullWidth rows={3} onChange={(e) => handleFormChange(e)} />
         </CardContent>
         <CardActions>
           <Spacer />
           <Button color="inherit" type="submit" onClick={() => sendReport()}>
             Send
-        </Button>
+          </Button>
         </CardActions>
       </form>
     </Card>
