@@ -6,12 +6,12 @@
 
 なお、`stage`が、上記のいずれでもなかった場合は
 
-- status: `400`
+- code: `invalid-argument`
 - message: `Invalid Stage`
 
 を返却する。
 
-## `POST /api/:stage/room`
+## onCall `room`
 
 ルーム作成し、ルームIDを返す。
 
@@ -25,11 +25,11 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
-  "id": "{roomId}"
+  "roomId": "{roomId}"
 }
 ```
 
-## `POST /api/:stage/:roomId/enter`
+## onCall `enter`
 
 ルームへの入場を宣言する。
 
@@ -44,7 +44,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
-  "uid": "{userId}",
+  "roomId": "{roomId}",
   "name": "{userName}"
 }
 ```
@@ -63,13 +63,12 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
-|`:roomId`が存在しない|404|Room Not Found||
-|`uid`が存在しない|401|Unauthenticated User||
-|`name`が不正|400|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
-|`name`が重複|409|Conflict Name|`name`はルーム内で一意である必要が有る|
-|すでに入室済み|400|Already Entered|`Room.users`に`uid`が存在していない必要が有る|
+|`:roomId`が存在しない|`not-found`|Room Not Found||
+|`name`が不正|`out-of-range`|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
+|`name`が重複|`already-exists`|Conflict Name|`name`はルーム内で一意である必要が有る|
+|すでに入室済み|`already-exists`|Already Entered|`Room.users`に`uid`が存在していない必要が有る|
 
-## `PUT /api/:stage/:roomId/ready`
+## onCall `ready`
 
 自身の`UserState`を`ready`にする。
 
@@ -86,8 +85,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
-  "uid": "{userId}",
-  "secret": "{userSecret}"
+  "roomId": "{roomId}",
 }
 ```
 
@@ -105,13 +103,12 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
-|`:roomId`が存在しない|404|Room Not Found||
-|`uid`が存在しない|401|Unauthenticated User||
-|`secret`が誤っている|401|Invalid Secret||
-|`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
-|すでにReady済み|400|Already Ready|`UserState`が`pending`のときのみreadyできる|
+|`:roomId`が存在しない|`not-found`|Room Not Found||
+|ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
+|`RoomState`が`playing`|`failed-precondition`|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
+|すでにReady済み|`failed-precondition`|Already Ready|`UserState`が`pending`のときのみreadyできる|
 
-## `POST /api/:stage/:roomId/answer`
+## onCall `answer`
 
 `writer`でないユーザーが回答する。
 
@@ -128,8 +125,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 ```json
 {
-  "uid": "{userId}",
-  "secret": "{userSecret}",
+  "roomId": "{roomId}",
   "answer": "{answerUserId}"
 }
 ```
@@ -150,13 +146,12 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
-|`:roomId`が存在しない|404|Room Not Found||
-|`uid`が存在しない|401|Unauthenticated User||
-|`secret`が誤っている|401|Invalid Secret||
-|`answer`が不正|400|Invalid Answer||
-|自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
+|`:roomId`が存在しない|`not-found`|Room Not Found||
+|ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
+|`answer`が不正|`invalid-argument`|Invalid Answer||
+|自身を回答|`invalid-argument`|Self Answer|`uid`と`answer`は異なる必要がある|
 
-## `POST /api/{stage}/report`
+## onRequest `POST /api/report`
 
 レポートを投稿する。
 
