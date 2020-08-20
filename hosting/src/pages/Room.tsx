@@ -95,6 +95,7 @@ class RoomComponent extends React.Component<Props, State> {
   onVoteUser(voteUserId: UserID): void {
     const vote = functions.httpsCallable('answer');
     vote({
+      stage: process.env.REACT_APP_STAGE,
       roomId: this.state.roomId,
       answer: voteUserId,
     })
@@ -110,17 +111,13 @@ class RoomComponent extends React.Component<Props, State> {
   }
 
   onReady(): void {
-    fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/ready`, {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        uid: this.state.user?.uid,
-        secret: this.state.secret,
-      }),
+    const ready = functions.httpsCallable('ready');
+    ready({
+      stage: process.env.REACT_APP_STAGE,
+      roomId: this.state.roomId,
     })
-      .then((res) => {
-        if (res.ok) return;
-        throw new Error(res.statusText);
+      .then((res: firebase.functions.HttpsCallableResult) => {
+        console.log('ready', res);
       })
       .catch((err) => {
         console.error(err);
@@ -131,26 +128,14 @@ class RoomComponent extends React.Component<Props, State> {
     return new Promise((resolve, reject) => {
       RoomComponent.login().then((user) => {
         this.setState({ user });
-        return realtimeDB.ref(`secrets/${user.uid}`).once('value');
+        const enter = functions.httpsCallable('enter');
+        return enter({
+          stage: process.env.REACT_APP_STAGE,
+          roomId: this.state.roomId,
+          name,
+        });
       })
-        .then((doc) => {
-          if (!doc.exists()) throw new Error('Secret not found.');
-          const secret = doc.val() as string;
-          this.setState({ secret });
-          return fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/enter`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-              uid: this.state.user?.uid,
-              name,
-              secret,
-            }),
-          });
-        })
-        .then((res) => {
-          if (!res.ok) throw new Error(res.statusText);
-          return realtimeDB.ref(`${ROOMS_PATH}/${this.state.roomId}`).once('value');
-        })
+        .then(() => realtimeDB.ref(`${ROOMS_PATH}/${this.state.roomId}`).once('value'))
         .then((doc) => {
           if (!doc.exists()) throw new Error('Room not found');
           const room = doc.val() as Room;
