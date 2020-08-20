@@ -8,7 +8,7 @@ import UserList from '../components/UserList';
 import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 
-import { realtimeDB, auth } from '../utils/firebase';
+import { realtimeDB, auth, functions } from '../utils/firebase';
 import { Room, Language, UserID } from '../types/types';
 import { languages } from '../utils/constants';
 
@@ -93,26 +93,20 @@ class RoomComponent extends React.Component<Props, State> {
   }
 
   onVoteUser(voteUserId: UserID): void {
-    fetch(`${STAGED_ENDPOINT}/${this.state.roomId}/answer`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        uid: this.state.user?.uid,
-        secret: this.state.secret,
-        answer: voteUserId,
-      }),
-    }).then((res) => {
-      if (!res.ok) throw new Error(res.statusText);
-      return res.json();
-    }).then(({ correct }) => {
-      if (correct) {
-        console.log('Correct!');
-      } else {
-        console.log('Incorrect');
-      }
-    }).catch((err) => {
-      console.error(err);
-    });
+    const vote = functions.httpsCallable('answer');
+    vote({
+      roomId: this.state.roomId,
+      answer: voteUserId,
+    })
+      .then((res: firebase.functions.HttpsCallableResult) => {
+        if (res.data.correct) {
+          console.log('Correct!');
+        } else {
+          console.log('Incorrect');
+        }
+      }).catch((err) => {
+        console.error(err);
+      });
   }
 
   onReady(): void {
