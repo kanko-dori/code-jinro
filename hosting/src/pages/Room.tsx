@@ -4,12 +4,12 @@ import { Snackbar } from '@material-ui/core';
 import NameInput from '../components/NameInput';
 import Editor from '../components/Editor';
 import Problem from '../components/Problem';
-import Users from '../components/Users';
+import UserList from '../components/UserList';
 import Stats from '../components/Stats';
 import Notification from '../components/Notification';
 
-import { realtimeDB, auth } from '../utils/firebase';
-import { Room, Language } from '../types/types';
+import { realtimeDB, auth, functions } from '../utils/firebase';
+import { Room, Language, UserID } from '../types/types';
 import { languages } from '../utils/constants';
 
 import classes from './Room.module.css';
@@ -24,7 +24,7 @@ interface Props {
 }
 interface State {
   room?: Room
-  id: string
+  roomId: string
   user?: firebase.User
   loginAlert: boolean
   watchingMode: boolean
@@ -33,19 +33,34 @@ interface State {
 const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/rooms`;
 
 class RoomComponent extends React.Component<Props, State> {
+  static login():Promise<firebase.User> {
+    return new Promise((resolve, reject) => {
+      auth.signInAnonymously().catch((err) => console.error('Signin Anonymously failed: ', err));
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          resolve(user);
+        } else {
+          reject(new Error('unexpected error'));
+        }
+      });
+    });
+  }
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      id: props.match.params.id,
+      roomId: props.match.params.id,
       loginAlert: false,
       watchingMode: false,
     };
 
     this.onLangChange = this.onLangChange.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
+    this.onVoteUser = this.onVoteUser.bind(this);
+    this.onReady = this.onReady.bind(this);
     this.onNameInput = this.onNameInput.bind(this);
 
-    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
+    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.roomId}`);
     docRef.on('value', (doc) => {
       const data = doc.val() as Room;
       console.log('value: ', data);
@@ -57,7 +72,7 @@ class RoomComponent extends React.Component<Props, State> {
     console.log({ language });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`${ROOMS_PATH}/${prevState.id}/currentRound`).update({ language });
+      realtimeDB.ref(`${ROOMS_PATH}/${prevState.roomId}/currentRound`).update({ language });
       const { room } = prevState;
       room.currentRound.language = language;
       return { room };
@@ -68,46 +83,68 @@ class RoomComponent extends React.Component<Props, State> {
     console.log({ code });
     this.setState((prevState) => {
       if (!prevState.room) return null;
-      realtimeDB.ref(`${ROOMS_PATH}/${prevState.id}/currentRound`).update({ code });
+      realtimeDB.ref(`${ROOMS_PATH}/${prevState.roomId}/currentRound`).update({ code });
       const { room } = prevState;
       room.currentRound.code = code;
       return { room };
     });
   }
 
-  // eslint-disable-next-line
-  async onNameInput(name: string):Promise<void> {
-    await this.login().catch(() => {
-      this.setState({ loginAlert: true });
-    });
-
-    // TODO: POST /api/:stage/:roomId/enter
-    const docRef = realtimeDB.ref(`${ROOMS_PATH}/${this.state.id}`);
-    console.log(docRef);
-    docRef.once('value').then((doc) => {
-      console.log({ doc });
-      if (doc.exists()) { // exist room
-        const room = doc.val() as Room;
-        this.setState({ room });
-      } else { // not exist room
-        // TODO: error
-      }
-    });
+  onVoteUser(voteUserId: UserID): void {
+    const vote = functions.httpsCallable('answer');
+    vote({
+      stage: process.env.REACT_APP_STAGE,
+      roomId: this.state.roomId,
+      answer: voteUserId,
+    })
+      .then((res: firebase.functions.HttpsCallableResult) => {
+        if (res.data.correct) {
+          console.log('Correct!');
+        } else {
+          console.log('Incorrect');
+        }
+      }).catch((err) => {
+        console.error(err);
+      });
   }
 
-  login():Promise<firebase.User> {
-    return new Promise((resolve, reject) => {
-      auth.signInAnonymously().catch((err) => console.error('Signin Anonymously failed: ', err));
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          console.log(user);
-          // eslint-disable-next-line react/no-unused-state
-          this.setState({ user });
-          resolve(user);
-        } else {
-          reject(new Error('unexpected error'));
-        }
+  onReady(): void {
+    const ready = functions.httpsCallable('ready');
+    ready({
+      stage: process.env.REACT_APP_STAGE,
+      roomId: this.state.roomId,
+    })
+      .then((res: firebase.functions.HttpsCallableResult) => {
+        console.log('ready', res);
+      })
+      .catch((err) => {
+        console.error(err);
       });
+  }
+
+  onNameInput(name: string):Promise<void> {
+    return new Promise((resolve, reject) => {
+      RoomComponent.login().then((user) => {
+        this.setState({ user });
+        const enter = functions.httpsCallable('enter');
+        return enter({
+          stage: process.env.REACT_APP_STAGE,
+          roomId: this.state.roomId,
+          name,
+        });
+      })
+        .then(() => realtimeDB.ref(`${ROOMS_PATH}/${this.state.roomId}`).once('value'))
+        .then((doc) => {
+          if (!doc.exists()) throw new Error('Room not found');
+          const room = doc.val() as Room;
+          console.log({ room });
+          this.setState({ room });
+          resolve();
+        })
+        .catch((err) => {
+          this.setState({ loginAlert: true });
+          reject(err);
+        });
     });
   }
 
@@ -130,10 +167,14 @@ class RoomComponent extends React.Component<Props, State> {
           <Problem url="https://atcoder.jp/contests/abc047/tasks/abc047_a" />
         </section>
         <section className={classes.users}>
-          <Users users={this.state.room?.users} />
+          <UserList
+            users={this.state.room?.users}
+            selfId={this.state.user?.uid}
+            onVote={this.onVoteUser}
+          />
         </section>
         <section className={classes.stats}>
-          <Stats onReady={() => { /* TODO: PUT /api/:stage/:roomId/ready */console.log('Ready'); }} />
+          <Stats onReady={this.onReady} />
         </section>
         <Notification
           open={this.state.loginAlert}

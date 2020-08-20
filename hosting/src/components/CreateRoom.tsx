@@ -3,28 +3,25 @@ import {
   Button, Card, CardContent, Typography,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import { Room } from '../types/types';
 import Spacer from './Spacer';
+import { functions } from '../utils/firebase';
 
 import classes from './CreateRoom.module.css';
-
-type response = {
-  room: Room,
-  id: string
-}
 
 const CreateRoom: React.FC = () => {
   const history = useHistory();
 
   const handleClick = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    fetch(`/api/${process.env.NODE_ENV}/room`, { method: 'POST' })
-      .then((response) => response.json())
-      .then((data: response) => {
-        console.log(data);
-        history.push(`/room/${data.id}`);
+    const createRoom = functions.httpsCallable('room');
+    createRoom({
+      stage: process.env.REACT_APP_STAGE,
+    })
+      .then((res: firebase.functions.HttpsCallableResult) => {
+        console.log(res);
+        history.push(`/room/${res.data.roomId}`);
       }).catch((err) => {
-        console.log('fetch failed: ', err);
+        console.log('fetch failed:', err);
       });
   };
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import React from 'react';
 import {
   Radio,
@@ -8,18 +7,20 @@ import {
   FormControlLabel,
   Button,
 } from '@material-ui/core';
-import { Users } from '../types/types';
+import { Users, UserID } from '../types/types';
 
-import classes from './Users.module.css';
+import classes from './UserList.module.css';
 
 interface Props {
+  selfId?: UserID;
   users?: Users;
+  onVote: (voteUserId: string) => void;
 }
 interface State {
   voteUserId: string;
 }
 
-class UsersComponent extends React.Component<Props, State> {
+class UserList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -30,13 +31,15 @@ class UsersComponent extends React.Component<Props, State> {
     };
   }
 
-  onRadioChange(event: React.ChangeEvent<HTMLInputElement>, value: string):void {
-    this.setState({ voteUserId: value });
+  onRadioChange(event: React.ChangeEvent<HTMLInputElement>, voteUserId: string):void {
+    if (voteUserId === this.props.selfId) return;
+    this.setState({ voteUserId });
   }
 
   onVoteUser(event: React.FormEvent<HTMLFormElement>):void {
     event.preventDefault();
     const votedUser = this.props.users && this.props.users[this.state.voteUserId];
+    this.props.onVote(this.state.voteUserId);
     console.log({ votedUser });
   }
 
@@ -48,14 +51,16 @@ class UsersComponent extends React.Component<Props, State> {
             <FormLabel component="legend">Vote writing user</FormLabel>
             <RadioGroup value={this.state.voteUserId} onChange={this.onRadioChange}>
               {
-                Object.entries(this.props.users ?? {}).map(([userId, user]) => (
-                  <FormControlLabel
-                    key={user.name + userId}
-                    value={userId}
-                    control={<Radio />}
-                    label={user.name}
-                  />
-                ))
+                Object.entries(this.props.users ?? {})
+                  .sort(([userId]) => (userId === this.props.selfId ? -1 : 0))
+                  .map(([userId, user]) => (
+                    <FormControlLabel
+                      key={user.name + userId}
+                      value={userId}
+                      control={<Radio />}
+                      label={user.name}
+                    />
+                  ))
               }
             </RadioGroup>
           </FormControl>
@@ -67,4 +72,4 @@ class UsersComponent extends React.Component<Props, State> {
     );
   }
 }
-export default UsersComponent;
+export default UserList;
