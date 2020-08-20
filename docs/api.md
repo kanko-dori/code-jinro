@@ -104,7 +104,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |type|code|message|備考|
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
-|ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
+|ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
 |`RoomState`が`playing`|`failed-precondition`|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
 |すでにReady済み|`failed-precondition`|Already Ready|`UserState`が`pending`のときのみreadyできる|
 
@@ -147,9 +147,9 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |type|code|message|備考|
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
-|ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
-|`answer`が不正|400|Invalid Answer||
-|自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
+|ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
+|`answer`が不正|`invalid-argument`|Invalid Answer||
+|自身を回答|`invalid-argument`|Self Answer|`uid`と`answer`は異なる必要がある|
 
 ## onRequest `POST /api/report`
 
