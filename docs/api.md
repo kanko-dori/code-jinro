@@ -11,7 +11,7 @@
 
 を返却する。
 
-## `POST /api/:stage/room`
+## onCall `room`
 
 ルーム作成し、ルームIDを返す。
 
@@ -29,7 +29,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 }
 ```
 
-## `POST /api/:stage/:roomId/enter`
+## onCall `enter`
 
 ルームへの入場を宣言する。
 
@@ -69,7 +69,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |`name`が重複|409|Conflict Name|`name`はルーム内で一意である必要が有る|
 |すでに入室済み|400|Already Entered|`Room.users`に`uid`が存在していない必要が有る|
 
-## `PUT /api/:stage/:roomId/ready`
+## onCall `ready`
 
 自身の`UserState`を`ready`にする。
 
@@ -111,7 +111,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
 |すでにReady済み|400|Already Ready|`UserState`が`pending`のときのみreadyできる|
 
-## `POST /api/:stage/:roomId/answer`
+## onCall `answer`
 
 `writer`でないユーザーが回答する。
 
@@ -156,7 +156,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |`answer`が不正|400|Invalid Answer||
 |自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
 
-## `POST /api/{stage}/report`
+## onRequest `POST /api/report`
 
 レポートを投稿する。
 
