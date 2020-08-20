@@ -86,7 +86,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 ```json
 {
   "roomId": "{roomId}",
-  "secret": "{userSecret}"
 }
 ```
 
@@ -127,7 +126,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 ```json
 {
   "roomId": "{roomId}",
-  "secret": "{userSecret}",
   "answer": "{answerUserId}"
 }
 ```
