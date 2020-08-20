@@ -64,7 +64,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
-|`:roomId`が存在しない|404|Room Not Found||
+|`:roomId`が存在しない|`not-found`|Room Not Found||
 |`uid`が存在しない|401|Unauthenticated User||
 |`name`が不正|400|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
 |`name`が重複|409|Conflict Name|`name`はルーム内で一意である必要が有る|
@@ -107,7 +107,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
-|`:roomId`が存在しない|404|Room Not Found||
+|`:roomId`が存在しない|`not-found`|Room Not Found||
 |`uid`が存在しない|401|Unauthenticated User||
 |`secret`が誤っている|401|Invalid Secret||
 |`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
@@ -153,7 +153,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
-|`:roomId`が存在しない|404|Room Not Found||
+|`:roomId`が存在しない|`not-found`|Room Not Found||
 |`uid`が存在しない|401|Unauthenticated User||
 |`secret`が誤っている|401|Invalid Secret||
 |`answer`が不正|400|Invalid Answer||
