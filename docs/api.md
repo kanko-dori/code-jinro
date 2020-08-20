@@ -106,7 +106,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
-|`secret`が誤っている|401|Invalid Secret||
 |`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
 |すでにReady済み|400|Already Ready|`UserState`が`pending`のときのみreadyできる|
 
@@ -151,7 +150,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
-|`secret`が誤っている|401|Invalid Secret||
 |`answer`が不正|400|Invalid Answer||
 |自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
 
