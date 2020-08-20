@@ -2,7 +2,7 @@
 
 バックエンドは[Cloud Functions for Firebase](https://firebase.google.com/docs/functions?hl=ja)を用いる。
 
-各APIのエンドポイントは`/api/:stage/`というURLから始まる。`stage`は`prodction`/`staging`/`dev`が入り、ステージを分岐する。
+各APIのエンドポイントは`/api/:stage/`というURLから始まる。`stage`は`prodction`/`staging`/`development`が入り、ステージを分岐する。
 
 なお、`stage`が、上記のいずれでもなかった場合は
 
