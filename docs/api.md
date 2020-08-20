@@ -64,7 +64,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |type|code|message|備考|
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
-|`uid`が存在しない|401|Unauthenticated User||
 |`name`が不正|400|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
 |`name`が重複|409|Conflict Name|`name`はルーム内で一意である必要が有る|
 |すでに入室済み|400|Already Entered|`Room.users`に`uid`が存在していない必要が有る|
@@ -106,7 +105,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |type|code|message|備考|
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
-|`uid`が存在しない|401|Unauthenticated User||
+|ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
 |`secret`が誤っている|401|Invalid Secret||
 |`RoomState`が`playing`|400|Playing Room|`RoomState`が`waiting`のときのみreadyできる|
 |すでにReady済み|400|Already Ready|`UserState`が`pending`のときのみreadyできる|
@@ -151,7 +150,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 |type|code|message|備考|
 |---|---|---|---|
 |`:roomId`が存在しない|`not-found`|Room Not Found||
-|`uid`が存在しない|401|Unauthenticated User||
+|ルーム内にユーザが存在しない|`permission-denied`|You must enter the room.||
 |`secret`が誤っている|401|Invalid Secret||
 |`answer`が不正|400|Invalid Answer||
 |自身を回答|400|Self Answer|`uid`と`answer`は異なる必要がある|
