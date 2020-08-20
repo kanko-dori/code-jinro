@@ -28,11 +28,9 @@ interface State {
   user?: firebase.User
   loginAlert: boolean
   watchingMode: boolean
-  secret?: string
 }
 
 const ROOMS_PATH = `${process.env.REACT_APP_STAGE}/rooms`;
-const STAGED_ENDPOINT = `/api/${process.env.REACT_APP_STAGE}`;
 
 class RoomComponent extends React.Component<Props, State> {
   static login():Promise<firebase.User> {
