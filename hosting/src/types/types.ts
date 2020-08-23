@@ -1,4 +1,4 @@
-import { languages } from '../utils/constants';
+import { languages, stages } from '../utils/constants';
 
 export type Room = {
   currentRound: Round,
@@ -30,3 +30,5 @@ export type RoomState = 'playing' | 'waiting';
 export type UserState = 'pending' | 'ready' | 'playing';
 
 export type Language = typeof languages[number];
+
+export type Stage = typeof stages[number];

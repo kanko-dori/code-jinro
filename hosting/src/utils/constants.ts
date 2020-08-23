@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const languages = [
   'javascript',
   'c_cpp',
@@ -12,3 +11,9 @@ export const languages = [
   'rust',
   'php',
 ] as const;
+
+export const stages = [
+  'production',
+  'staging',
+  'development',
+];
