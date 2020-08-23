@@ -65,6 +65,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
+|ログインしていない|`unauthenticated`|Unauthenticated User||
 |`stage`が不正|`invalid-arguments`|Invalid Stage||
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |`name`が不正|`out-of-range`|Invalid Name|`name`は1字以上かつ20字以下である必要が有る|
@@ -105,6 +106,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
+|ログインしていない|`unauthenticated`|Unauthenticated User||
 |`stage`が不正|`invalid-arguments`|Invalid Stage||
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
@@ -148,6 +150,7 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 |type|code|message|備考|
 |---|---|---|---|
+|ログインしていない|`unauthenticated`|Unauthenticated User||
 |`stage`が不正|`invalid-arguments`|Invalid Stage||
 |`:roomId`が存在しない|`not-found`|Room Not Found||
 |ルーム内にユーザが存在しない|`permission-denied`|Invalid Request||
