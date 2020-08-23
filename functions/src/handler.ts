@@ -22,7 +22,7 @@ const getUid = (ctx: functions.https.CallableContext): string => {
   throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated User');
 };
 
-const checkRoomId = (stage: string, id: string) => getRoomReference(stage, id).once('value')
+const getRoom = (stage: string, id: string) => getRoomReference(stage, id).once('value')
   .then((snap) => {
     const data = snap.val();
     if (data != null) return data;
@@ -58,7 +58,7 @@ export const enterRoom = (
   checkStage(data.stage);
   const uid = getUid(ctx);
 
-  return checkRoomId(data.stage, data.roomId)
+  return getRoom(data.stage, data.roomId)
     .then((room: Room) => {
       if (uid in room.users) throw new functions.https.HttpsError('already-exists', 'Already Entered');
       if (Object.values(room.users).map((user: User) => user.name).includes(data.name)) throw new functions.https.HttpsError('already-exists', 'Conflict Name');
