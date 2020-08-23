@@ -117,3 +117,45 @@ export const ready = async (
     .then(() => ({}))
     .catch(internalErrorHandler);
 };
+
+const WRITER_POINT = 2;
+const WINNER_POINT = 2;
+
+export const answer = async (
+  data: { stage: string, roomId: string, answer: string },
+  ctx: functions.https.CallableContext,
+): Promise<{ correct: boolean }> => {
+  checkStage(data.stage);
+  const uid = getUid(ctx);
+  const room: Room | undefined = await getRoom(data.stage, data.roomId).catch(internalErrorHandler);
+  if (room == null) internalErrorHandler(new Error('Room undefined'));
+
+  if (!(uid in room.users)) throw new HttpsError('permission-denied', 'Invalid Request');
+  if (!(data.answer in room.users)) throw new HttpsError('invalid-argument', 'Invalid Answer');
+  if (data.answer === uid) throw new HttpsError('invalid-argument', 'Self Answer');
+
+  const { writer } = room.currentRound;
+  const correct = data.answer === writer;
+  const userlist = Object.values(room.users);
+  const pendingCount = userlist.filter((user: User) => user.state === 'pending').length + 1;
+
+  if (!correct && userlist.length > pendingCount) {
+    return getRoomReference(data.stage, data.roomId).child(`users/${uid}/state`).set('pending')
+      .then(() => ({ correct }));
+  }
+  const pendingUsers = Object.keys(room.users).reduce((acc, id: string) => {
+    acc[id] = room.users[id];
+    acc[id].state = 'pending';
+    return acc;
+  }, {} as { [id: string]: User });
+  return getRoomReference(data.stage, data.roomId).child('users').set(pendingUsers)
+    .then(() => getRoomReference(data.stage, data.roomId).child(`users/${writer}/points`).set(room.users[writer].points + WRITER_POINT))
+    .then(() => {
+      if (!correct) return Promise.resolve({ correct });
+      return getRoomReference(data.stage, data.roomId).child('currentRound/winner').set(uid)
+        .then(() => getRoomReference(data.stage, data.roomId).child(`users/${uid}/points`).set(room.users[uid].points + WINNER_POINT))
+        .then(() => ({ correct }))
+        .catch(internalErrorHandler);
+    })
+    .catch(internalErrorHandler);
+};
