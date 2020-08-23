@@ -17,6 +17,11 @@ const checkStage = (stage: string) => {
   throw new functions.https.HttpsError('invalid-argument', 'Invalid Stage');
 };
 
+const getUid = (ctx: functions.https.CallableContext): string => {
+  if (ctx.auth) return ctx.auth.uid;
+  throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated User');
+};
+
 const checkRoomId = (stage: string, id: string) => getRoomReference(stage, id).once('value')
   .then((snap) => {
     const data = snap.val();
@@ -51,11 +56,11 @@ export const enterRoom = (
   ctx: functions.https.CallableContext,
 ): Promise<Record<string, unknown>> => {
   checkStage(data.stage);
+  const uid = getUid(ctx);
 
   return checkRoomId(data.stage, data.roomId)
     .then((room: Room) => {
-      if (!ctx.auth) throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated User');
-      if (ctx.auth.uid in room.users) throw new functions.https.HttpsError('already-exists', 'Already Entered');
+      if (uid in room.users) throw new functions.https.HttpsError('already-exists', 'Already Entered');
       if (Object.values(room.users).map((user: User) => user.name).includes(data.name)) throw new functions.https.HttpsError('already-exists', 'Conflict Name');
       if (data.name.length < 1 || data.name.length > 20) throw new functions.https.HttpsError('out-of-range', 'Invalid Name');
 
@@ -65,7 +70,7 @@ export const enterRoom = (
         state: 'pending',
       };
 
-      return getRoomReference(data.stage, data.roomId).child(`users/${ctx.auth.uid}`).set(user);
+      return getRoomReference(data.stage, data.roomId).child(`users/${uid}`).set(user);
     })
     .then(() => ({}))
     .catch((err: Error) => {
