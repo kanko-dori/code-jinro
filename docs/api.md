@@ -20,8 +20,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 #### 成功
 
-- status: `201`
-
 ```json
 {
   "roomId": "{roomId}"
@@ -58,8 +56,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 ### レスポンス
 
 #### 成功
-
-- status: `201`
 
 ```json
 {}
@@ -101,8 +97,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 
 #### 成功
 
-- status: `200`
-
 ```json
 {}
 ```
@@ -143,8 +137,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 ### レスポンス
 
 #### 成功
-
-- status: `200`
 
 ```json
 {
