@@ -41,7 +41,6 @@ IDは`Realtime Database`で自動生成されるものを用いる。
 - user.nameをリクエスト`name`から設定
 - user.pointsを`0`に設定
 - user.stateを`pending`に設定
-- user.secretを`crypto.randomBytes->toString`で生成・設定
 
 ### リクエスト
 
