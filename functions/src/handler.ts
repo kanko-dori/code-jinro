@@ -4,6 +4,8 @@ import * as firebase from 'firebase-admin';
 import { Room, User } from './types/types';
 import { languages, stages } from './utils/constants';
 
+const { HttpsError } = functions.https;
+
 export const ping = (request: functions.Request, response: functions.Response): void => {
   functions.logger.info('ping');
   response.sendStatus(200);
@@ -12,21 +14,25 @@ export const ping = (request: functions.Request, response: functions.Response): 
 const getRoomsReference = (stage: string) => firebase.database().ref(`${stage}/rooms`);
 const getRoomReference = (stage: string, id: string) => getRoomsReference(stage).child(id);
 
+const internalErrorHandler = (err: Error) => {
+  throw new HttpsError('internal', err.message);
+};
+
 const checkStage = (stage: string) => {
   if ((stages as readonly string[]).includes(stage)) return 0;
-  throw new functions.https.HttpsError('invalid-argument', 'Invalid Stage');
+  throw new HttpsError('invalid-argument', 'Invalid Stage');
 };
 
 const getUid = (ctx: functions.https.CallableContext): string => {
   if (ctx.auth) return ctx.auth.uid;
-  throw new functions.https.HttpsError('unauthenticated', 'Unauthenticated User');
+  throw new HttpsError('unauthenticated', 'Unauthenticated User');
 };
 
 const getRoom = (stage: string, id: string) => getRoomReference(stage, id).once('value')
   .then((snap) => {
     const data = snap.val();
     if (data != null) return data;
-    throw new functions.https.HttpsError('not-found', 'Room Not Found');
+    throw new HttpsError('not-found', 'Room Not Found');
   });
 
 export const createRoom = (data: { stage: string }): Promise<{ roomId?: string }> => {
@@ -46,9 +52,7 @@ export const createRoom = (data: { stage: string }): Promise<{ roomId?: string }
   };
 
   return roomRef.set(room).then(() => ({ roomId: roomRef.key ?? undefined }))
-    .catch((err: Error) => {
-      throw new functions.https.HttpsError('internal', err.message);
-    });
+    .catch(internalErrorHandler);
 };
 
 export const enterRoom = (
@@ -60,9 +64,9 @@ export const enterRoom = (
 
   return getRoom(data.stage, data.roomId)
     .then((room: Room) => {
-      if (uid in room.users) throw new functions.https.HttpsError('already-exists', 'Already Entered');
-      if (Object.values(room.users).map((user: User) => user.name).includes(data.name)) throw new functions.https.HttpsError('already-exists', 'Conflict Name');
-      if (data.name.length < 1 || data.name.length > 20) throw new functions.https.HttpsError('out-of-range', 'Invalid Name');
+      if (uid in room.users) throw new HttpsError('already-exists', 'Already Entered');
+      if (Object.values(room.users).map((user: User) => user.name).includes(data.name)) throw new HttpsError('already-exists', 'Conflict Name');
+      if (data.name.length < 1 || data.name.length > 20) throw new HttpsError('out-of-range', 'Invalid Name');
 
       const user = {
         name: data.name,
@@ -73,7 +77,43 @@ export const enterRoom = (
       return getRoomReference(data.stage, data.roomId).child(`users/${uid}`).set(user);
     })
     .then(() => ({}))
-    .catch((err: Error) => {
-      throw new functions.https.HttpsError('internal', err.message);
-    });
+    .catch(internalErrorHandler);
+};
+
+export const ready = async (
+  data: { stage: string, roomId: string },
+  ctx: functions.https.CallableContext,
+): Promise<Record<string, unknown>> => {
+  checkStage(data.stage);
+  const uid = getUid(ctx);
+  const room: Room | undefined = await getRoom(data.stage, data.roomId).catch(internalErrorHandler);
+  if (room == null) internalErrorHandler(new Error('Room undefined'));
+
+  if (!(uid in room.users)) throw new HttpsError('permission-denied', 'Invalid Request');
+  if (room.state === 'playing') throw new HttpsError('failed-precondition', 'Playing Room');
+  if (room.users[uid].state !== 'pending') throw new HttpsError('failed-precondition', 'Already Ready');
+
+  return getRoomReference(data.stage, data.roomId).child(`users/${uid}/state`).set('ready')
+    .then(() => getRoom(data.stage, data.roomId))
+    .then(() => {
+      if (Object.values(room.users).find((user: User) => user.state !== 'ready')) return {};
+
+      const { history } = room;
+      history.push(room.currentRound);
+
+      return getRoomReference(data.stage, data.roomId).child('history').set(history);
+    })
+    .then(() => {
+      const usersUid = Object.keys(room.users);
+      const currentRound = {
+        language: room.currentRound.language,
+        problemURL: '',
+        code: '',
+        writer: usersUid[Math.floor(Math.random() * usersUid.length)],
+      };
+
+      return getRoomReference(data.stage, data.roomId).child('currentRound').set(currentRound);
+    })
+    .then(() => ({}))
+    .catch(internalErrorHandler);
 };
